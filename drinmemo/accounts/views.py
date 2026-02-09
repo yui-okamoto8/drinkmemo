@@ -7,7 +7,7 @@ def home(request):
     )
 
 def regist(request):
-    regist_form = forms.RegistForm(request.PST or None)
+    regist_form = forms.RegistForm(request.POST or None)
     if regist_form.is_valid():
         regist_form.save(commit=True)
         return redirect('accounts:home')
