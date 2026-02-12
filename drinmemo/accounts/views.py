@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect
 from . import forms
+from django.contrib.auth import authenticate
+
 
 def home(request):
     return render(
@@ -16,3 +18,7 @@ def regist(request):
             'regist_form' : regist_form,
         }
     )
+
+def activate_user(request, token):
+    pass
+
