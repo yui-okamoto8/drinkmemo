@@ -136,3 +136,4 @@ MEDIA_URL = '/media/'
 AUTH_USER_MODEL = 'accounts.User'
 
 LOGUIN_URL = 'accounts:login'
+LOGIN_REDIRECT_URL = 'accounts:home'

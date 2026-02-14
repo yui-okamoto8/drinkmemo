@@ -39,9 +39,13 @@ class RegistForm(forms.ModelForm):
     def save(self, commit=True):
         user = super().save(commit=False)
         user.set_password(self.cleaned_data.get('password'))
+        
+        user.is_active = True
+        
         if commit:
             user.save()
         return user
 
-class UserActivateForm(forms.Form):
-    token = forms.CharField(widget=forms.HiddenInput())
+# class UserActivateForm(forms.Form):
+#     token = forms.CharField(widget=forms.HiddenInput())
+
