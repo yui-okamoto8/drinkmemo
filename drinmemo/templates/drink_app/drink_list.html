@@ -1,5 +1,27 @@
 {% extends "base.html" %}
 {% block content %}
 <h2>マイドリンク一覧</h2>
-<p>記録並ぶ</p>
+
+<!-- ① 記録追加ボタン -->
+<div style="margin-bottom: 20px;">
+    <a href="{% url 'drink_app:create' %}" class="btn btn-primary">
+        ＋ 記録追加
+    </a>
+</div>
+
+<!-- ② 記録一覧 -->
+{% if records %}
+    <ul class="list-group">
+        {% for r in records %}
+            <li class="list-group-item">
+                <strong>{{ r.drink_name }}</strong><br>
+                記録日：{{ r.recorded_date }}<br>
+                総合評価：{{ r.total_rating }}
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>まだ記録がありません。</p>
+{% endif %}
+
 {% endblock %}
