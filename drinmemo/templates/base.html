@@ -3,18 +3,25 @@
     <head>
         <meta charset="utf-8">
         <!-- bootstrap -->
-         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">" 
+         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     </head>
     <body>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <nav class='navbar navbar-expand-lg navbar-light bg-light'>
             <div class='container'>
-                <a class="navbar-brand" href="{% url 'accounts:home' %}">ホーム</a>
+                <a class='navbar-brand' href='{% url 'accounts:home' %}'>ホーム</a>
                 {% if user.is_authenticated %}
                 {% else %}
-                    <a class='navbar-brand' href="{% url 'accounts:regist' %}">ユーザー登録</a>
+                    <a class='navbar-brand' href='{% url 'accounts:regist' %}'>ユーザー登録</a>
                 {% endif %}
             </div>
         </nav>
         {% block content %}{% endblock %}
+
+        <footer class="app-footer">
+            <a href="{% url 'accounts:home' %}">ホーム</a>
+            <a href="{% url 'drink_app:list' %}">マイドリンク</a>
+            <a href="#">好みの傾向</a>
+        </footer>
+
     </body>
 </html>
