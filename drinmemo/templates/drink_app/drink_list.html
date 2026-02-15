@@ -3,35 +3,69 @@
 <h2>マイドリンク</h2>
 
 <!-- ① 記録追加ボタン -->
-<div style="margin-bottom: 20px;">
-    <a href="{% url 'drink_app:create' %}" class="btn btn-primary">
+<div style='margin-bottom: 20px;'>
+    <a href='{% url 'drink_app:create' %}' class='btn btn-primary'>
         ＋ 記録追加
     </a>
 </div>
 
 <!-- テキスト検索バー -->
-<form method="get" class="mb-3">
-    <input type="text" name="q" value="{{ query }}" placeholder="飲み物名・店舗名・メーカー名で検索" class="form-control">
+<form method='get' class='mb-3'>
+    <input type='text' name='q' value='{{ query }}' placeholder='飲み物名・店舗名・メーカー名で検索' class='form-control'>
 </form>
 
 <!-- フィルター検索のリンク -->
-<div class="mb-3">
+<div class='mb-3'>
     <a href="#" class="text-decoration-underline">
         フィルター検索
     </a>
 </div>
 
 <!-- 記録一覧 -->
-{% if records %}
-    <ul class="list-group">
-        {% for r in page_obj %}
-            <li class="list-group-item">
-                <strong>{{ r.drink_name }}</strong><br>
-                記録日：{{ r.recorded_date }}<br>
-                総合評価：{{ r.total_rating }}
-            </li>
-        {% endfor %}
-    </ul>
+{% if page_obj %}
+<div class='row row-cols-3 g-3'>
+
+  {% for r in page_obj %}
+  <div class='col'>
+    <div class='card h-100'>
+      <a href="{% url 'drink_app:detail' r.id %}" style="text-decoration:none; color:inherit;">
+
+    <!-- 画像 -->
+    {% if r.image %}
+        <img src='{{ r.image.url }}' class='card-img-top'
+             style='aspect-ratio:1/1; object-fit:cover;'>
+    {% else %}
+        <div style='aspect-ratio:1/1; background:#f2f2f2;
+                    display:flex; align-items:center; justify-content:center;'>
+        <span style='font-size:12px; color:#888;'>No Image</span>
+        </div>
+     {% endif %}
+
+    <div class='card-body p-2'>
+
+    <!-- 星 -->
+    <div style='font-size:14px; color:#f5b301;'>
+    {% for i in "012" %}
+        {% if forloop.counter0 < r.total_rating %}
+            ★
+        {% else %}
+            ☆
+        {% endif %}
+    {% endfor %}
+</div>
+
+    <!-- 飲み物名 -->
+    <div style='font-weight:600; font-size:13px;'>
+        {{ r.drink_name }}
+    </div>
+    
+    </div>
+    </a>
+    </div>
+  </div>
+  {% endfor %}
+
+</div>
 
 <!-- ページ移動ボタン -->
     {% if page_obj.paginator.num_pages > 1 %}
@@ -39,7 +73,7 @@
       <ul class="pagination">
         {% if page_obj.has_previous %}
           <li class="page-item">
-            <a class="page-link" href="?q={{ query }}&page={{ page_obj.previous_page_number }}">前へ</a>
+            <a class="page-link" href="?query={{ query }}&page={{ page_obj.previous_page_number }}">前へ</a>
           </li>
         {% endif %}
 

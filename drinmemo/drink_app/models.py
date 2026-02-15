@@ -38,7 +38,8 @@ class DrinkRecord(TimeStampedModel):
     maker_name = models.CharField('メーカー名', max_length=100, blank=True, null=True)
     TASTE_CHOICES = ((0, '好き'), (1, '普通'), (2, '苦手'))
     taste_rating = models.IntegerField('味の評価', choices=TASTE_CHOICES)
-    total_rating = models.IntegerField('総合評価')
+    RATING_CHOICES = ((0, '☆☆☆'), (1, '★☆☆'), (2, '★★☆'),(3, '★★★'))
+    total_rating = models.IntegerField('総合評価',choices=RATING_CHOICES)
     memo = models.TextField('メモ', blank=True, null=True)
     image = models.ImageField('写真', upload_to='drink_records/', blank=True, null=True)
 

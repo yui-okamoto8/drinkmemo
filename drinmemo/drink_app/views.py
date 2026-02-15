@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from .forms import DrinkRecordForm
 from django.db.models import Q
 from django.core.paginator import Paginator
+from django.shortcuts import get_object_or_404
 
 from .models import DrinkRecord
 
@@ -42,3 +43,32 @@ def drink_create(request):
             return redirect('drink_app:list')
         
     return render(request, 'drink_app/drink_form.html', {'form': form})
+
+@login_required
+def drink_detail(request, pk):
+    record = get_object_or_404(DrinkRecord, pk=pk, user=request.user)
+    return render(request, 'drink_app/drink_detail.html', {'record': record})
+
+
+@login_required
+def drink_update(request, pk):
+    record = get_object_or_404(DrinkRecord, pk=pk, user=request.user)
+    form = DrinkRecordForm(request.POST or None, request.FILES or None, instance=record)
+
+    if request.method == 'POST' and form.is_valid():
+        form.save()
+        return redirect('drink_app:detail', pk=record.pk)
+
+    return render(request, 'drink_app/drink_form.html', {'form': form, 'is_edit': True})
+
+
+@login_required
+def drink_delete(request, pk):
+    record = get_object_or_404(DrinkRecord, pk=pk, user=request.user)
+
+    if request.method == 'POST':
+        record.delete()
+        return redirect('drink_app:list')
+
+    # まずは確認ページでOK（モーダルは後で置き換え）
+    return render(request, 'drink_app/drink_confirm_delete.html', {'record': record})

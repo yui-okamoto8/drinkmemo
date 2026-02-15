@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2>マイドリンク＞登録内容詳細</h2>
+
+{% if record.image %}
+  <img src="{{ record.image.url }}" alt="drink" style="max-width: 240px; height: auto;">
+{% else %}
+    <div style='aspect-ratio:1/1; background:#f2f2f2;
+                display:flex; align-items:center; justify-content:center;'>
+    <span style='font-size:12px; color:#888;'>No Image</span>
+    </div>
+{% endif %}
+
+<p>記録日：{{ record.recorded_date }}</p>
+<p>店舗名：{{ record.store_name|default:"-" }}</p>
+<p>メーカー名：{{ record.maker_name|default:"-" }}</p>
+
+<p>総合評価：{{ record.total_rating }}</p>
+<p>味の評価：{{ record.get_taste_rating_display }}</p>
+
+<p>素材：</p>
+<ul>
+  {% for ing in record.ingredients.all %}
+    <li>{{ ing.name }}</li>
+  {% empty %}
+    <li>未選択</li>
+  {% endfor %}
+</ul>
+
+<p>メモ：</p>
+<p>{{ record.memo|default:"-"|linebreaksbr }}</p>
+
+<hr>
+
+<a class="btn btn-outline-primary" href="{% url 'drink_app:edit' record.id %}">編集</a>
+
+<form method="post" action="{% url 'drink_app:delete' record.id %}" style="display:inline;">
+  {% csrf_token %}
+  <button type="submit" class="btn btn-outline-danger">削除</button>
+
+<p>
+<a href="{% url 'drink_app:list' %}">← 一覧へ戻る</a>
+</p>
+
+{% endblock %}
