@@ -4,7 +4,74 @@
 
 <form method='post' enctype='multipart/form-data'>
   {% csrf_token %}
-  {{ form.as_p }}
+    {% if form.non_field_errors %}
+    <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+  {% endif %}
+
+  <div class="mb-3">
+    {{ form.image.label_tag }}
+    {{ form.image }}
+    {{ form.image.errors }}
+  </div>
+
+  <div class="mb-3">
+    {{ form.recorded_date.label_tag }}
+    {{ form.recorded_date }}
+    {{ form.recorded_date.errors }}
+  </div>
+
+  <div class="mb-3">
+    {{ form.drink_name.label_tag }}
+    {{ form.drink_name }}
+    {{ form.drink_name.errors }}
+  </div>
+
+  <div class="mb-3">
+    {{ form.store_name.label_tag }}
+    {{ form.store_name }}
+    {{ form.store_name.errors }}
+  </div>
+
+  <div class="mb-3">
+    {{ form.maker_name.label_tag }}
+    {{ form.maker_name }}
+    {{ form.maker_name.errors }}
+  </div>
+
+  <div class="mb-3">
+    {{ form.drink_type.label_tag }}
+    {{ form.drink_type }}
+    {{ form.drink_type.errors }}
+  </div>
+
+  <div class="mb-3">
+    {{ form.taste_rating.label_tag }}
+    {{ form.taste_rating }}
+    {{ form.taste_rating.errors }}
+  </div>
+
+<label class="form-label">素材（複数選択）:</label>
+
+<div id="ingredients-box" class="form-control"
+    style="height: 180px; overflow-y: auto; overflow-x: hidden;">
+  <div id="ingredients-placeholder" style="color:#888; font-size:13px;">
+    飲み物の種類を選ぶと素材が表示されます
+  </div>
+  <div id="ingredients-area"></div>
+</div>
+
+  <div class="mb-3">
+    {{ form.total_rating.label_tag }}
+    {{ form.total_rating }}
+    {{ form.total_rating.errors }}
+  </div>
+
+  <div class="mb-3">
+    {{ form.memo.label_tag }}
+    {{ form.memo }}
+    {{ form.memo.errors }}
+  </div>
+
 <div class='d-grid gap-2 mt-4'>
     <button type='submit' class='btn btn-primary'>
         保存
@@ -19,5 +86,71 @@
 
 {% endif %}
 
-<a href='{% url 'drink_app:list' %}''>一覧へ</a>
+<a href='{% url 'drink_app:list' %}'>一覧へ</a>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const drinkTypeEl = document.getElementById("id_drink_type");
+  const ingredientsArea = document.getElementById("ingredients-area");
+
+  const initialSelected = new Set(
+    Array.from(document.querySelectorAll('input[name="ingredients"]:checked')).map(el => el.value)
+  );
+
+  async function refreshIngredients() {
+    const drinkType = drinkTypeEl.value;
+
+    // drink_type が未選択（"-----"）なら素材は空表示
+    if (!drinkType) {
+      ingredientsArea.innerHTML = "";
+      return;
+    }
+
+    // APIから素材取得
+    const res = await fetch(`/drink/api/ingredients/?drink_type=${drinkType}`);
+    if (!res.ok) {
+      ingredientsArea.innerHTML = "<p style='color:red;'>素材の取得に失敗しました</p>";
+      return;
+    }
+    const data = await res.json();
+
+    // チェックボックス描画
+    ingredientsArea.innerHTML = "";
+    data.ingredients.forEach(item => {
+      const id = `ing_${item.id}`;
+
+      const wrapper = document.createElement("div");
+      wrapper.className = "form-check mb-1";
+
+      const input = document.createElement("input");
+      input.type = "checkbox";
+      input.name = "ingredients"; 
+      input.value = item.id;
+      input.id = id;
+      input.className = "form-check-input";
+
+      // 以前選択していたものを復元（編集用）
+      if (initialSelected.has(String(item.id))) {
+        input.checked = true;
+      }
+
+      const label = document.createElement("label");
+      label.htmlFor = id;
+      label.textContent = item.name;
+      label.className = "form-check-label";
+
+      wrapper.appendChild(input);
+      wrapper.appendChild(label);
+      ingredientsArea.appendChild(wrapper);
+    });
+  }
+
+  drinkTypeEl.addEventListener("change", refreshIngredients);
+
+  refreshIngredients();
+});
+</script>
+
+
+
 {% endblock %}

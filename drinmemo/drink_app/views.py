@@ -4,6 +4,8 @@ from .forms import DrinkRecordForm
 from django.db.models import Q
 from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404
+from django.http import JsonResponse
+from .models import Ingredient
 
 from .models import DrinkRecord
 
@@ -45,6 +47,17 @@ def drink_create(request):
     return render(request, 'drink_app/drink_form.html', {'form': form})
 
 @login_required
+def ingredients_filter(request):
+    drink_type_id = request.GET.get('drink_type')
+    if not drink_type_id:
+        return JsonResponse({'ingredients': []})
+
+    qs = Ingredient.objects.filter(drink_type_id=drink_type_id).order_by('name')
+    data = [{'id': ing.id, 'name': ing.name} for ing in qs]
+    return JsonResponse({'ingredients': data})
+
+
+@login_required
 def drink_detail(request, pk):
     record = get_object_or_404(DrinkRecord, pk=pk, user=request.user)
     return render(request, 'drink_app/drink_detail.html', {'record': record})
@@ -71,5 +84,4 @@ def drink_delete(request, pk):
         record.delete()
         return redirect('drink_app:list')
 
-    # まずは確認ページでOK（モーダルは後で置き換え）
     return render(request, 'drink_app/drink_confirm_delete.html', {'record': record})

@@ -1,5 +1,6 @@
 from django import forms
 from .models import DrinkRecord
+from .models import Ingredient
 
 class DrinkRecordForm(forms.ModelForm):
     class Meta:
@@ -19,4 +20,13 @@ class DrinkRecordForm(forms.ModelForm):
         widgets = {
             'recorded_date': forms.DateInput(attrs={'type': 'date'}),
             'memo': forms.Textarea(attrs={'rows': 3}),
+            'ingredients': forms.CheckboxSelectMultiple(attrs={'size':'8'})
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        if self.instance and getattr(self.instance, 'drink_type_id', None):
+            self.fields['ingredients'].queryset = Ingredient.objects.filter(
+                drink_type_id=self.instance.drink_type_id
+            ).order_by('name')

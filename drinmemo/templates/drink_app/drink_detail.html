@@ -12,14 +12,14 @@
     </div>
 {% endif %}
 
-<p>記録日：{{ record.recorded_date }}</p>
-<p>店舗名：{{ record.store_name|default:"-" }}</p>
-<p>メーカー名：{{ record.maker_name|default:"-" }}</p>
+<p>記録日： {{ record.recorded_date }}</p>
+<p>店舗名： {{ record.store_name|default:"-" }}</p>
+<p>メーカー名： {{ record.maker_name|default:"-" }}</p>
 
-<p>総合評価：{{ record.total_rating }}</p>
-<p>味の評価：{{ record.get_taste_rating_display }}</p>
+<p>総合評価： {{ record.total_rating }}</p>
+<p>味の評価： {{ record.get_taste_rating_display }}</p>
 
-<p>素材：</p>
+<p>素材： </p>
 <ul>
   {% for ing in record.ingredients.all %}
     <li>{{ ing.name }}</li>
@@ -28,7 +28,7 @@
   {% endfor %}
 </ul>
 
-<p>メモ：</p>
+<p>メモ： </p>
 <p>{{ record.memo|default:"-"|linebreaksbr }}</p>
 
 <hr>

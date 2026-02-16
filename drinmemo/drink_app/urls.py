@@ -9,4 +9,6 @@ urlpatterns = [
     path('<int:pk>/', views.drink_detail, name='detail'),
     path('<int:pk>/edit/', views.drink_update, name='edit'),
     path('<int:pk>/delete/', views.drink_delete, name='delete'),
+    path("api/ingredients/", views.ingredients_filter, name='ingredients_filter'),
 ]
+
