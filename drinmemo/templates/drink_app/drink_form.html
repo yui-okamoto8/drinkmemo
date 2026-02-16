@@ -1,12 +1,23 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 {% block content %}
 <h2>記録画面</h2>
 
-<form method="post" enctype="multipart/form-data">
+<form method='post' enctype='multipart/form-data'>
   {% csrf_token %}
   {{ form.as_p }}
-  <button type="submit">保存</button>
-</form>
+<div class='d-grid gap-2 mt-4'>
+    <button type='submit' class='btn btn-primary'>
+        保存
+    </button>
 
-<a href="{% url 'drink_app:list' %}">一覧へ</a>
+{% if is_edit %}
+  <a href='{% url 'drink_app:detail' record.id %}'
+    class='btn btn-outline-primary'>
+      詳細へ戻る
+  </a>
+</div>
+
+{% endif %}
+
+<a href='{% url 'drink_app:list' %}''>一覧へ</a>
 {% endblock %}

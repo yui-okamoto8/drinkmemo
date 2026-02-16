@@ -33,14 +33,51 @@
 
 <hr>
 
-<a class="btn btn-outline-primary" href="{% url 'drink_app:edit' record.id %}">編集</a>
+<a class="btn btn-outline-primary" 
+    href="{% url 'drink_app:edit' record.id %}">編集</a>
 
-<form method="post" action="{% url 'drink_app:delete' record.id %}" style="display:inline;">
-  {% csrf_token %}
-  <button type="submit" class="btn btn-outline-danger">削除</button>
+<button type="button"
+        class="btn btn-outline-danger"
+        data-bs-toggle="modal"
+        data-bs-target="#deleteModal">
+    削除
+</button>
 
 <p>
 <a href="{% url 'drink_app:list' %}">← 一覧へ戻る</a>
 </p>
+
+<div class='modal fade' id='deleteModal' tabindex='-1'>
+  <div class='modal-dialog'>
+    <div class='modal-content'>
+
+      <div class='modal-header'>
+        <h5 class='modal-title'>削除確認</h5>
+        <button type='button' class='btn-close' data-bs-dismiss='modal'></button>
+      </div>
+
+      <div class='modal-body'>
+        「{{ record.drink_name }}」を削除しますか？
+      </div>
+
+      <div class='modal-footer'>
+        <button type='button' class='btn btn-secondary'
+                data-bs-dismiss='modal'>
+            いいえ
+        </button>
+
+        <form method='post'
+              action='{% url 'drink_app:delete' record.id %}'>
+          {% csrf_token %}
+          <button type='submit' class='btn btn-danger'>
+            はい
+          </button>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+
 
 {% endblock %}

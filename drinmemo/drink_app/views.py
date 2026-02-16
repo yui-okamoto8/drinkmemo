@@ -59,7 +59,8 @@ def drink_update(request, pk):
         form.save()
         return redirect('drink_app:detail', pk=record.pk)
 
-    return render(request, 'drink_app/drink_form.html', {'form': form, 'is_edit': True})
+    return render(request, 'drink_app/drink_form.html', 
+                  {'form': form, 'is_edit': True, 'record':record,})
 
 
 @login_required
