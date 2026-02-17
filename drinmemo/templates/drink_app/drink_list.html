@@ -16,7 +16,7 @@
 
 <!-- フィルター検索のリンク -->
 <div class='mb-3'>
-    <a href="#" class="text-decoration-underline">
+    <a href='{% url 'drink_app:filter' %}' class='text-decoration-underline'>
         フィルター検索
     </a>
 </div>
@@ -73,7 +73,8 @@
       <ul class="pagination">
         {% if page_obj.has_previous %}
           <li class="page-item">
-            <a class="page-link" href="?query={{ query }}&page={{ page_obj.previous_page_number }}">前へ</a>
+            <a class="page-link" href="?q={{ q }}&start={{ start }}&end={{ end }}&drink_type={{ drink_type }}&taste={{ taste }}&total={{ total }}&page={{ num }}">
+前へ</a>
           </li>
         {% endif %}
 
@@ -82,14 +83,16 @@
             <li class="page-item active"><span class="page-link">{{ num }}</span></li>
           {% else %}
             <li class="page-item">
-              <a class="page-link" href="?q={{ query }}&page={{ num }}">{{ num }}</a>
+              <a class="page-link" href="?q={{ q }}&start={{ start }}&end={{ end }}&drink_type={{ drink_type }}&taste={{ taste }}&total={{ total }}&page={{ num }}">
+{{ num }}</a>
             </li>
           {% endif %}
         {% endfor %}
 
         {% if page_obj.has_next %}
           <li class="page-item">
-            <a class="page-link" href="?q={{ query }}&page={{ page_obj.next_page_number }}">次へ</a>
+            <a class="page-link" hhref="?q={{ q }}&start={{ start }}&end={{ end }}&drink_type={{ drink_type }}&taste={{ taste }}&total={{ total }}&page={{ num }}">
+次へ</a>
           </li>
         {% endif %}
       </ul>

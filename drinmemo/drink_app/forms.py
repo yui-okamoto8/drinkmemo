@@ -1,6 +1,7 @@
 from django import forms
 from .models import DrinkRecord
 from .models import Ingredient
+from .models import DrinkType
 
 class DrinkRecordForm(forms.ModelForm):
     class Meta:
@@ -30,3 +31,49 @@ class DrinkRecordForm(forms.ModelForm):
             self.fields['ingredients'].queryset = Ingredient.objects.filter(
                 drink_type_id=self.instance.drink_type_id
             ).order_by('name')
+
+
+TASTE_CHOICES = (
+    ('', '指定なし'),
+    ('0', '好き'),
+    ('1', '普通'),
+    ('2', '苦手'),
+)
+
+TOTAL_CHOICES = (
+    ('', '指定なし'),
+    ('0', '★★★'),
+    ('1', '★★☆'),
+    ('2', '★☆☆'),
+    ('3', '☆☆☆'),
+)
+
+class DrinkFilterForm(forms.Form):
+
+    start = forms.DateField(
+        label='開始日', required=False,
+        widget=forms.DateInput(attrs={'type': 'date'})
+    )
+    end = forms.DateField(
+        label='終了日', required=False,
+        widget=forms.DateInput(attrs={'type': 'date'})
+    )
+
+    drink_type = forms.ModelChoiceField(
+        label='飲み物の種類',
+        queryset=DrinkType.objects.all(),
+        required=False,
+        empty_label='指定なし'
+    )
+
+    taste = forms.ChoiceField(
+        label='味の評価',
+        choices=TASTE_CHOICES,
+        required=False
+    )
+
+    total = forms.ChoiceField(
+        label='総合評価',
+        choices=TOTAL_CHOICES,
+        required=False
+    )

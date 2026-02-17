@@ -60,6 +60,8 @@
   <div id="ingredients-area"></div>
 </div>
 
+<input type="hidden" id="initial-selected-ids" value="{{ selected_ids|join:',' }}">
+
   <div class="mb-3">
     {{ form.total_rating.label_tag }}
     {{ form.total_rating }}
@@ -93,9 +95,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const drinkTypeEl = document.getElementById("id_drink_type");
   const ingredientsArea = document.getElementById("ingredients-area");
 
-  const initialSelected = new Set(
-    Array.from(document.querySelectorAll('input[name="ingredients"]:checked')).map(el => el.value)
-  );
+  const initialSelected = new Set();
+  const hidden = document.getElementById("initial-selected-ids");
+  if (hidden && hidden.value.trim() !== "") {
+    hidden.value.split(",").forEach(v => initialSelected.add(v.trim()));
+  }
+
 
   async function refreshIngredients() {
     const drinkType = drinkTypeEl.value;

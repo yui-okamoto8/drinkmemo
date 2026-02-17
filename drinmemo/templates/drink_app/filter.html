@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>フィルター検索</h2>
+
+<form method='get'>
+  <input type='hidden' name='submit' value='1'>
+  {{ form.as_p }}
+
+  <div class='d-grid gap-2'>
+    <button type='submit' class='btn btn-primary'>検索する</button>
+    <a class='btn btn-outline-secondary' href='{% url 'drink_app:list' %}'>一覧へ戻る</a>
+  </div>
+</form>
+
+{% endblock %}
