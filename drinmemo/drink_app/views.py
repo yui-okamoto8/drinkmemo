@@ -1,18 +1,14 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from .forms import DrinkRecordForm
-from django.db.models import Q
+from .forms import DrinkRecordForm, DrinkFilterForm
+from django.db.models import Q, Count
 from django.core.paginator import Paginator
-from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
-from .models import Ingredient
-from .forms import DrinkFilterForm
 from django.urls import reverse
 from urllib.parse import urlencode
-from django.db.models import Count
+
 from .models import DrinkRecord, Ingredient, TasteFeature, DrinkType
 
-from .models import DrinkRecord
 
 
 @login_required
@@ -26,6 +22,9 @@ def drink_list(request):
     drink_type = request.GET.get('drink_type') or ''
     taste = request.GET.get('taste') or ''
     total = request.GET.get('total') or ''
+
+    ingredients_param = request.GET.get('ingredients') or ''
+    taste_feature_ids = request.GET.getlist('taste_features')
 
     if query:
         records = records.filter(
@@ -47,10 +46,19 @@ def drink_list(request):
 
     if total != '':
         records = records.filter(total_rating=int(total))
+    
+    if ingredients_param:
+        ids = [int(x) for x in ingredients_param.split(",") if x.isdigit()]
+        if ids:
+            records = records.filter(ingredients__id__in=ids).distinct()
+
+    taste_feature_ids = request.GET.getlist('taste_features')
+    if taste_feature_ids:
+        records = records.filter(taste_features__id__in=taste_feature_ids).distinct()
 
     records = records.order_by('-recorded_date', '-id')
 
-    paginator = Paginator(records, 3)
+    paginator = Paginator(records, 15)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
@@ -63,6 +71,8 @@ def drink_list(request):
         'drink_type': drink_type,
         'taste': taste,
         'total': total,
+        'ingredients': ingredients_param,
+        'taste_features': taste_feature_ids,
         })
 
 
@@ -87,6 +97,8 @@ def ingredients_filter(request):
     qs = Ingredient.objects.filter(drink_type_id=drink_type_id).order_by('name')
     data = [{'id': ing.id, 'name': ing.name} for ing in qs]
     return JsonResponse({'ingredients': data})
+
+
 
 
 @login_required
@@ -128,44 +140,14 @@ def drink_delete(request, pk):
 @login_required
 def drink_filter(request):
     form = DrinkFilterForm(request.GET or None)
+    return render(request, "drink_app/filter.html", {"form": form})
 
-    if request.GET.get('submit'):
-        if form.is_valid():  
-            params = {}
-
-            start = form.cleaned_data.get('start')
-            if start:
-                params['start'] = start.strftime('%Y-%m-%d')
-
-            end = form.cleaned_data.get('end')
-            if end:
-               params['end'] = end.strftime('%Y-%m-%d')
-
-            drink_type = form.cleaned_data.get('drink_type')
-            if drink_type:
-                params['drink_type'] = str(drink_type.id)
-
-            taste = form.cleaned_data.get('taste')
-            if taste != '':
-                params['taste'] = taste
-
-            total = form.cleaned_data.get('total')
-            if total != '':
-                params['total'] = total
-
-            url = reverse('drink_app:list')
-            if params:
-              url = f'{url}?{urlencode(params)}'
-            return redirect(url)
-
-    return render(request, 'drink_app/filter.html', {'form': form})
-
-
+#集計
 @login_required
 def summary(request):
     base_qs = DrinkRecord.objects.filter(user=request.user)
 
-    # 1) よく飲む飲み物（drink_type最多）
+    # よく飲む飲み物（drink_type最多）
     top_drink_type = (
         base_qs.values('drink_type__name')
         .annotate(cnt=Count('id'))
@@ -173,7 +155,7 @@ def summary(request):
         .first()
     )
 
-    # 2) 好き/苦手：素材・味の特徴 上位3
+    # 好き/苦手：素材・味の特徴 上位3
     liked_qs = base_qs.filter(taste_rating=0)
     disliked_qs = base_qs.filter(taste_rating=2)
 
@@ -206,7 +188,7 @@ def summary(request):
     )
 
     return render(request, 'drink_app/summary.html', {
-        'top_drink_type': top_drink_type,  # 例: {'drink_type__name': 'コーヒー', 'cnt': 12}
+        'top_drink_type': top_drink_type,
         'top_like_ingredients': top_like_ingredients,
         'top_dislike_ingredients': top_dislike_ingredients,
         'top_like_features': top_like_features,

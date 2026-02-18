@@ -1,7 +1,6 @@
 from django import forms
 from .models import DrinkRecord
-from .models import Ingredient
-from .models import DrinkType
+from .models import DrinkType, Ingredient, TasteFeature
 from django.contrib.auth import get_user_model
 
 class DrinkRecordForm(forms.ModelForm):
@@ -40,9 +39,9 @@ class DrinkRecordForm(forms.ModelForm):
 
 TASTE_CHOICES = (
     ('', '指定なし'),
-    ('0', '好き'),
-    ('1', '普通'),
-    ('2', '苦手'),
+    ('0', '♡好き'),
+    ('1', '⚪︎普通'),
+    ('2', '×苦手'),
 )
 
 TOTAL_CHOICES = (
@@ -71,10 +70,24 @@ class DrinkFilterForm(forms.Form):
         empty_label='指定なし'
     )
 
+    ingredients = forms.ModelMultipleChoiceField(
+        queryset=Ingredient.objects.all().order_by('name'),
+        required=False,
+        widget=forms.CheckboxSelectMultiple,
+        label='素材',
+    )
+
     taste = forms.ChoiceField(
         label='味の評価',
         choices=TASTE_CHOICES,
         required=False
+    )
+
+    taste_features = forms.ModelMultipleChoiceField(
+        queryset=TasteFeature.objects.all().order_by('name'),
+        required=False,
+        widget=forms.CheckboxSelectMultiple,
+        label='味の特徴'
     )
 
     total = forms.ChoiceField(

@@ -45,7 +45,7 @@ class DrinkRecord(TimeStampedModel):
     drink_name = models.CharField('飲み物名', max_length=100)
     store_name = models.CharField('店舗名', max_length=100, blank=True, null=True)
     maker_name = models.CharField('メーカー名', max_length=100, blank=True, null=True)
-    TASTE_CHOICES = ((0, '好き'), (1, '普通'), (2, '苦手'))
+    TASTE_CHOICES = ((0, '♡好き'), (1, '⚪︎普通'), (2, '×苦手'))
     taste_rating = models.IntegerField('味の評価', choices=TASTE_CHOICES)
     RATING_CHOICES = ((0, '☆☆☆'), (1, '★☆☆'), (2, '★★☆'),(3, '★★★'))
     total_rating = models.IntegerField('総合評価',choices=RATING_CHOICES)

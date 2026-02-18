@@ -2,14 +2,121 @@
 {% block content %}
 <h2>フィルター検索</h2>
 
-<form method='get'>
-  <input type='hidden' name='submit' value='1'>
-  {{ form.as_p }}
+<form method="get" action="{% url 'drink_app:list' %}">
+
+  <!-- 日付 -->
+  <div class="mb-3">
+    {{ form.start.label_tag }}
+    {{ form.start }}
+  </div>
+
+  <div class="mb-3">
+    {{ form.end.label_tag }}
+    {{ form.end }}
+  </div>
+
+  <!-- 飲み物の種類 -->
+  <div class="mb-3">
+    {{ form.drink_type.label_tag }}
+    {{ form.drink_type }}
+  </div>
+
+  <!--  素材 -->
+  <label class="form-label">素材（複数選択）</label>
+
+  <div id="ingredients-box"
+       class="form-control"
+       style="height:120px; overflow-y:auto;">
+
+    <div id="ingredients-placeholder"
+         style="color:#888; font-size:13px;">
+      飲み物の種類を選ぶと素材が表示されます
+    </div>
+
+    <div id="ingredients-area"></div>
+  </div>
+
+  <!-- 味の評価 -->
+  <div class="mb-3">
+    {{ form.taste.label_tag }}
+    {{ form.taste }}
+  </div>
+
+  <!-- 味の特徴（これは全候補出してOK） -->
+  <div class="mb-3">
+    {{ form.taste_features.label_tag }}
+    <div class="form-control" style="height:180px; overflow-y:auto;">
+      {{ form.taste_features }}
+    </div>
+  </div>
+
+  <!-- 総合評価 -->
+  <div class="mb-3">
+    {{ form.total.label_tag }}
+    {{ form.total }}
+  </div>
+  </div>
 
   <div class='d-grid gap-2'>
     <button type='submit' class='btn btn-primary'>検索する</button>
-    <a class='btn btn-outline-secondary' href='{% url 'drink_app:list' %}'>一覧へ戻る</a>
+    <a class='btn btn-outline-secondary' href="{% url 'drink_app:filter' %}">
+    条件をクリア
+  </a>
+    {% comment %} <a class='btn btn-outline-secondary' href='{% url 'drink_app:list' %}'>一覧へ戻る</a> {% endcomment %}
+    <a href="{% url 'drink_app:list' %}">← 一覧へ戻る</a>
   </div>
 </form>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  const drinkTypeEl = document.getElementById("id_drink_type");
+  const ingredientsArea = document.getElementById("ingredients-area");
+  const placeholder = document.getElementById("ingredients-placeholder");
+
+  async function refreshIngredients() {
+    const drinkType = drinkTypeEl.value;
+
+    if (!drinkType) {
+      ingredientsArea.innerHTML = "";
+      placeholder.style.display = "block";
+      return;
+    }
+
+    const res = await fetch(`/drink/api/ingredients/?drink_type=${drinkType}`);
+    if (!res.ok) {
+      ingredientsArea.innerHTML = "<p style='color:red;'>取得失敗</p>";
+      return;
+    }
+
+    const data = await res.json();
+    placeholder.style.display = "none";
+    ingredientsArea.innerHTML = "";
+
+    data.ingredients.forEach(item => {
+      const wrapper = document.createElement("div");
+      wrapper.className = "form-check mb-1";
+
+      const input = document.createElement("input");
+      input.type = "checkbox";
+      input.name = "ingredients";
+      input.value = item.id;
+      input.className = "form-check-input";
+
+      const label = document.createElement("label");
+      label.textContent = item.name;
+      label.className = "form-check-label";
+
+      wrapper.appendChild(input);
+      wrapper.appendChild(label);
+      ingredientsArea.appendChild(wrapper);
+    });
+  }
+
+  drinkTypeEl.addEventListener("change", refreshIngredients);
+  refreshIngredients();
+});
+</script>
 
 {% endblock %}

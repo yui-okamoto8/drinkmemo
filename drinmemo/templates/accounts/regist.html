@@ -1,8 +1,20 @@
-{% extends 'base.html' %}
+{% extends 'base_auth.html' %}
 {% block content %}
+<h4 class="mb-3">新規アカウント登録</h4>
 <form method='POST'>
     {% csrf_token %}
     {{ regist_form.as_p }}
-    <input type='submit' value='ユーザー登録'>
+    <div style="margin-top:-10px; margin-bottom:15px; font-size:13px; color:#666;">
+      ・パスワードは最低8文字以上必要です<br>
+      ・よく使われるパスワードにはできません<br>
+      ・数字だけのパスワードにはできません
+    </div>
+
+    <button type="submit" class="btn btn-primary w-30">ユーザー登録</button>
 </form>
+
+<div class="mt-3">
+  <a href="{% url 'accounts:login' %}">ログイン画面へ戻る</a>
+</div>
+
 {% endblock %}

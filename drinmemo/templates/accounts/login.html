@@ -1,9 +1,17 @@
-{% extends 'base.html' %}
+{% extends 'base_auth.html' %}
 {% block content %}
-<h2>ログイン</h2>
-<form method='post'>
+
+<h4 class="mb-3">ログイン</h4>
+
+<form method="post">
   {% csrf_token %}
   {{ form.as_p }}
-  <button type='submit'>ログイン</button>
+  <button type="submit" class="btn btn-primary w-30">ログイン</button>
 </form>
+
+<div class="mt-3">
+  <a href="{% url 'accounts:regist' %}">新規アカウント登録</a>
+</div>
+
 {% endblock %}
+
