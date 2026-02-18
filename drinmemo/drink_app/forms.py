@@ -15,17 +15,21 @@ class DrinkRecordForm(forms.ModelForm):
             'maker_name',
             'ingredients',
             'taste_rating',
+            'taste_features',
             'total_rating',
             'memo',
         ]
+
         widgets = {
             'recorded_date': forms.DateInput(attrs={'type': 'date'}),
             'memo': forms.Textarea(attrs={'rows': 3}),
-            'ingredients': forms.CheckboxSelectMultiple(attrs={'size':'8'})
+            'ingredients': forms.CheckboxSelectMultiple(attrs={'size':'8'}),
+            'taste_features': forms.CheckboxSelectMultiple(),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields['taste_features'].required = True
 
         if self.instance and getattr(self.instance, 'drink_type_id', None):
             self.fields['ingredients'].queryset = Ingredient.objects.filter(

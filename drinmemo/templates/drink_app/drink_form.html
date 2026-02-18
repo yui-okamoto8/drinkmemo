@@ -44,16 +44,10 @@
     {{ form.drink_type.errors }}
   </div>
 
-  <div class="mb-3">
-    {{ form.taste_rating.label_tag }}
-    {{ form.taste_rating }}
-    {{ form.taste_rating.errors }}
-  </div>
-
 <label class="form-label">素材（複数選択）:</label>
 
 <div id="ingredients-box" class="form-control"
-    style="height: 180px; overflow-y: auto; overflow-x: hidden;">
+    style="height: 110px; overflow-y: auto; overflow-x: hidden;">
   <div id="ingredients-placeholder" style="color:#888; font-size:13px;">
     飲み物の種類を選ぶと素材が表示されます
   </div>
@@ -61,6 +55,25 @@
 </div>
 
 <input type="hidden" id="initial-selected-ids" value="{{ selected_ids|join:',' }}">
+
+  <div class="mb-3">
+    {{ form.taste_rating.label_tag }}
+    {{ form.taste_rating }}
+    {{ form.taste_rating.errors }}
+  </div>
+
+<label class="form-label">味の特徴（複数選択）:</label>
+
+<div class="form-control" style="height: 110px; overflow-y: auto; overflow-x: hidden;">
+  <div style="color:#888; font-size:13px;">
+    該当する特徴を選択してください
+  </div>
+  <div class="mt-2">
+    {{ form.taste_features }}
+  </div>
+</div>
+
+{{ form.taste_features.errors }}
 
   <div class="mb-3">
     {{ form.total_rating.label_tag }}

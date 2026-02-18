@@ -13,11 +13,10 @@
 {% endif %}
 
 <p>記録日： {{ record.recorded_date }}</p>
-<p>店舗名： {{ record.store_name|default:"-" }}</p>
-<p>メーカー名： {{ record.maker_name|default:"-" }}</p>
-
-<p>総合評価： {{ record.total_rating }}</p>
-<p>味の評価： {{ record.get_taste_rating_display }}</p>
+<p>飲み物名： {{ record.drink_name }}</p>
+<p>飲み物の種類： {{ record.drink_type }}</p>
+<p>店舗名： {{ record.store_name|default:'-' }}</p>
+<p>メーカー名： {{ record.maker_name|default:'-'}}</p>
 
 <p>素材： </p>
 <ul>
@@ -28,18 +27,40 @@
   {% endfor %}
 </ul>
 
+<p>味の評価： {{ record.get_taste_rating_display }}</p>
+
+<p>味の特徴：</p>
+<ul>
+  {% for tf in record.taste_features.all %}
+    <li>{{ tf.name }}</li>
+  {% empty %}
+    <li>未選択</li>
+  {% endfor %}
+</ul>
+
+<p>総合評価：
+  <span style='font-size:18px; color:#f5b301;'>
+    {% for i in '012' %}
+      {% if forloop.counter0 < record.total_rating %}
+        ★
+      {% else %}
+        ☆
+      {% endif %}
+    {% endfor %}
+  </span>
+</p>
 <p>メモ： </p>
-<p>{{ record.memo|default:"-"|linebreaksbr }}</p>
+<p>{{ record.memo|default:'-'|linebreaksbr }}</p>
 
 <hr>
 
-<a class="btn btn-outline-primary" 
+<a class='btn btn-outline-primary' 
     href="{% url 'drink_app:edit' record.id %}">編集</a>
 
-<button type="button"
-        class="btn btn-outline-danger"
-        data-bs-toggle="modal"
-        data-bs-target="#deleteModal">
+<button type='button'
+        class='btn btn-outline-danger'
+        data-bs-toggle='modal'
+        data-bs-target='#deleteModal'>
     削除
 </button>
 

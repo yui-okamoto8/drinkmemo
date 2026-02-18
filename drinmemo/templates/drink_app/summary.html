@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2>集計</h2>
+
+<hr>
+
+<h4>よく飲む飲み物</h4>
+{% if top_drink_type %}
+  <p>
+    {{ top_drink_type.drink_type__name }}（{{ top_drink_type.cnt }}件）
+  </p>
+{% else %}
+  <p>まだ記録がありません。</p>
+{% endif %}
+
+<hr>
+
+<div class="row g-3">
+  <div class="col-12">
+    <h4>好き（上位3）</h4>
+
+    <p><strong>素材</strong></p>
+    <ul>
+      {% for x in top_like_ingredients %}
+        <li>{{ x.name }}（{{ x.cnt }}）</li>
+      {% empty %}
+        <li>まだありません</li>
+      {% endfor %}
+    </ul>
+
+    <p><strong>味の特徴</strong></p>
+    <ul>
+      {% for x in top_like_features %}
+        <li>{{ x.name }}（{{ x.cnt }}）</li>
+      {% empty %}
+        <li>まだありません</li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <div class="col-12">
+    <h4>苦手（上位3）</h4>
+
+    <p><strong>素材</strong></p>
+    <ul>
+      {% for x in top_dislike_ingredients %}
+        <li>{{ x.name }}（{{ x.cnt }}）</li>
+      {% empty %}
+        <li>まだありません</li>
+      {% endfor %}
+    </ul>
+
+    <p><strong>味の特徴</strong></p>
+    <ul>
+      {% for x in top_dislike_features %}
+        <li>{{ x.name }}（{{ x.cnt }}）</li>
+      {% empty %}
+        <li>まだありません</li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+
+<hr>
+<a class="btn btn-outline-primary" href="{% url 'drink_app:list' %}">一覧へ</a>
+
+{% endblock %}

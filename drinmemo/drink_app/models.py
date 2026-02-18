@@ -29,6 +29,15 @@ class Ingredient(TimeStampedModel):
     class Meta:
         db_table = 'ingredients'
 
+class TasteFeature(TimeStampedModel):
+    name = models.CharField(max_length=50, unique=True)
+
+    class Meta:
+        db_table = 'taste_features'
+
+    def __str__(self):
+        return self.name
+
 
 class DrinkRecord(TimeStampedModel):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='drink_records')
@@ -55,6 +64,14 @@ class DrinkRecord(TimeStampedModel):
     through="DrinkRecordIngredient",
     related_name='drink_records',
     verbose_name='素材',
+    blank=False
+    )
+
+    taste_features = models.ManyToManyField(
+        TasteFeature,
+        through='DrinkRecordTasteFeature',
+        related_name='drink_records',
+        verbose_name='味の特徴',
     )
 
     class Meta:
@@ -67,5 +84,21 @@ class DrinkRecordIngredient(TimeStampedModel):
     class Meta:
         db_table = 'drink_record_ingredients'
         constraints = [
-            models.UniqueConstraint(fields=["drink_record", "ingredient"], name="uniq_record_ingredient")
+            models.UniqueConstraint(
+                fields=["drink_record", "ingredient"],
+                name="uniq_record_ingredient")
         ]
+
+
+class DrinkRecordTasteFeature(TimeStampedModel):
+    drink_record = models.ForeignKey("DrinkRecord", on_delete=models.CASCADE)
+    taste_feature = models.ForeignKey("TasteFeature", on_delete=models.PROTECT)
+
+    class Meta:
+        db_table = "drink_record_taste_features"
+        constraints = [
+            models.UniqueConstraint(
+                fields=["drink_record", "taste_feature"],
+                name="uniq_record_taste_feature",
+            )
+        ]        

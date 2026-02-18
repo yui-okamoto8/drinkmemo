@@ -9,7 +9,8 @@ from .models import Ingredient
 from .forms import DrinkFilterForm
 from django.urls import reverse
 from urllib.parse import urlencode
-
+from django.db.models import Count
+from .models import DrinkRecord, Ingredient, TasteFeature, DrinkType
 
 from .models import DrinkRecord
 
@@ -158,3 +159,56 @@ def drink_filter(request):
             return redirect(url)
 
     return render(request, 'drink_app/filter.html', {'form': form})
+
+
+@login_required
+def summary(request):
+    base_qs = DrinkRecord.objects.filter(user=request.user)
+
+    # 1) よく飲む飲み物（drink_type最多）
+    top_drink_type = (
+        base_qs.values('drink_type__name')
+        .annotate(cnt=Count('id'))
+        .order_by('-cnt')
+        .first()
+    )
+
+    # 2) 好き/苦手：素材・味の特徴 上位3
+    liked_qs = base_qs.filter(taste_rating=0)
+    disliked_qs = base_qs.filter(taste_rating=2)
+
+    top_like_ingredients = (
+        Ingredient.objects.filter(drink_records__in=liked_qs)
+        .values('name')
+        .annotate(cnt=Count('id'))
+        .order_by('-cnt')[:3]
+    )
+
+    top_dislike_ingredients = (
+        Ingredient.objects.filter(drink_records__in=disliked_qs)
+        .values('name')
+        .annotate(cnt=Count('id'))
+        .order_by('-cnt')[:3]
+    )
+
+    top_like_features = (
+        TasteFeature.objects.filter(drink_records__in=liked_qs)
+        .values('name')
+        .annotate(cnt=Count('id'))
+        .order_by('-cnt')[:3]
+    )
+
+    top_dislike_features = (
+        TasteFeature.objects.filter(drink_records__in=disliked_qs)
+        .values('name')
+        .annotate(cnt=Count('id'))
+        .order_by('-cnt')[:3]
+    )
+
+    return render(request, 'drink_app/summary.html', {
+        'top_drink_type': top_drink_type,  # 例: {'drink_type__name': 'コーヒー', 'cnt': 12}
+        'top_like_ingredients': top_like_ingredients,
+        'top_dislike_ingredients': top_dislike_ingredients,
+        'top_like_features': top_like_features,
+        'top_dislike_features': top_dislike_features,
+    })
