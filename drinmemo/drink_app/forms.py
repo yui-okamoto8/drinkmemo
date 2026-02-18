@@ -2,6 +2,7 @@ from django import forms
 from .models import DrinkRecord
 from .models import Ingredient
 from .models import DrinkType
+from django.contrib.auth import get_user_model
 
 class DrinkRecordForm(forms.ModelForm):
     class Meta:
@@ -81,3 +82,4 @@ class DrinkFilterForm(forms.Form):
         choices=TOTAL_CHOICES,
         required=False
     )
+

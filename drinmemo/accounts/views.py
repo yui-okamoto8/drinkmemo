@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from . import forms
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from .forms import UsernameChangeForm, EmailChangeForm
 # from django.contrib.auth import authenticate
 # from.models import UserActivateToken
 # from django.contrib import messages
@@ -25,6 +27,49 @@ def regist(request):
 
 class UserLoginView(LoginView):
     template_name = 'accounts/login.html'
+
+@login_required
+def account_settings(request):
+    user = request.user
+
+    # モーダル用フォーム（初期値は現在のusername）
+    username_form = UsernameChangeForm(instance=user)
+
+    if request.method == "POST":
+        # ユーザー名変更だけこの画面で受ける
+        username_form = UsernameChangeForm(request.POST, instance=user)
+        if username_form.is_valid():
+            username_form.save()
+            messages.success(request, "アカウント名を変更できました")
+            return redirect("accounts:settings")
+        else:
+            messages.error(request, "入力内容を確認してください")
+
+    # パスワード変更後のクエリでメッセージ表示（?pw=1）
+    if request.GET.get("pw") == "1":
+        messages.success(request, "パスワードを変更できました")
+
+    # メール変更後のクエリでメッセージ表示（?email=1）
+    if request.GET.get("email") == "1":
+        messages.success(request, "メールアドレスを変更できました")
+
+    return render(request, "accounts/settings.html", {
+        "username_form": username_form,
+    })
+
+
+@login_required
+def email_change(request):
+    user = request.user
+    form = EmailChangeForm(instance=user)
+
+    if request.method == "POST":
+        form = EmailChangeForm(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect("/accounts/settings/?email=1")
+
+    return render(request, "accounts/email_change.html", {"form": form})
 
 # def activate_user(request, token):
 #     activate_form = forms. UserActivateForm(request.POST or None)

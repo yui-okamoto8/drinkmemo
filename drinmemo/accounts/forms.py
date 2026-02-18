@@ -2,6 +2,8 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
+from django.contrib.auth import get_user_model
+
 
 User = get_user_model()
 
@@ -45,6 +47,21 @@ class RegistForm(forms.ModelForm):
         if commit:
             user.save()
         return user
+    
+class UsernameChangeForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ("username",)
+        labels = {"username": "アカウント名"}
+
+class EmailChangeForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ("email",)
+        labels = {"email": "メールアドレス"}
+        widgets = {
+            "email": forms.EmailInput(attrs={"class": "form-control"})
+        }
 
 # class UserActivateForm(forms.Form):
 #     token = forms.CharField(widget=forms.HiddenInput())

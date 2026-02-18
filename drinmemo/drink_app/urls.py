@@ -11,6 +11,7 @@ urlpatterns = [
     path('<int:pk>/delete/', views.drink_delete, name='delete'),
     path('api/ingredients/', views.ingredients_filter, name='ingredients_filter'),
     path('filter/', views.drink_filter, name='filter'),
-    path('summary/', views.summary, name='summary'),
+    path('summary/', views.summary, name='summary'),    
 ]
+
 
