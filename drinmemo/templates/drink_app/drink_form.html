@@ -91,7 +91,8 @@
     <button type='submit' class='btn btn-primary'>
         保存
     </button>
-
+<br>
+    
 {% if is_edit %}
   <a href='{% url 'drink_app:detail' record.id %}'
     class='btn btn-outline-primary'>
@@ -101,7 +102,7 @@
 
 {% endif %}
 
-<a href='{% url 'drink_app:list' %}'>一覧へ</a>
+<a href='{% url 'drink_app:list' %}'>←一覧へ戻る</a>
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {

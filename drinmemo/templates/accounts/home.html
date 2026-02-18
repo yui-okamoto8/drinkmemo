@@ -1,4 +1,39 @@
 {% extends 'base.html' %}
-{% block content%}
-ホーム画面
+{% load static %}
+{% block content %}
+
+<div class="d-flex justify-content-center align-items-center"
+     style="min-height: calc(100vh - 120px); padding-top:40px;">
+
+  <div class="text-center" style="max-width:400px;">
+
+    <!-- タイトル -->
+    <h1 class='mb-3' style='color:#7b3f00; font-weight:700; font-size:42px; '>
+      Drink Memo
+    </h1>
+    <br> 
+    <br>
+    <!-- サブタイトル -->
+    <p style='font-size:19px; font-weight:500; color:#333;'>
+       今日は何を飲みましたか？
+    </p>
+    <p style='font-size:14px; color:#666; '>
+      〜 飲んだものを記録して好みを知ろう 〜
+    </p>
+
+    <div class="mt-4">
+      <a href="{% url 'drink_app:create' %}"
+         class="btn btn-secondary px-4">
+        記録する
+      </a>
+    
+    <div class='text-center mt-5'>
+        <img
+            src='{% static 'img/home.png' %}'
+            alt='home image'
+            style='max-width: 160px; height: auto; '
+        >
+  </div>
+</div>
+
 {% endblock %}
