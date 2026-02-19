@@ -1,25 +1,38 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>マイドリンク</h2>
+<div class='app-container'>
 
-<!-- ① 記録追加ボタン -->
-<div style='margin-bottom: 20px;'>
-    <a href='{% url 'drink_app:create' %}' class='btn btn-secondary'>
-        ＋ 記録追加
-    </a>
+<!-- 固定 -->
+<div class="list-fixed-top">
+    
+    <div class="d-flex align-items-center justify-content-between mb-3">
+      <h3 class="m-0" style="font-weight:700;">マイドリンク</h3>
+    </div>
+
+<!-- テキスト検索 -->
+    <form method='get' action='{% url 'drink_app:list' %}' class='mb-1'>
+    <div class="input-group">
+      <input type='text' name='q' value='{{ query }}' 
+     placeholder='飲み物名・店舗名・メーカー名で検索' class='form-control'
+      >
+    <button class='btn btn-outline-secondary' type='submit'>検索</button>
+    </div>
+    </form>
+
+<!-- フィルター検索 -->
+    <div class='text-center mt-2 mb-1'>
+       <a href='{% url 'drink_app:filter' %}' style='font-weight:550; text-decoration:none;'>
+           フィルター検索
+       </a>
+    </div>
+
 </div>
 
-<!-- テキスト検索バー -->
-<form method='get' class='mb-3'>
-    <input type='text' name='q' value='{{ query }}' placeholder='飲み物名・店舗名・メーカー名で検索' class='form-control'>
-</form>
-
-<!-- フィルター検索のリンク -->
-<div class='mb-3'>
-    <a href='{% url 'drink_app:filter' %}' class='text-decoration-underline'>
-        フィルター検索
-    </a>
-</div>
+<!-- 記録追加ボタン -->
+<a href='{% url 'drink_app:create' %}'
+   class='btn btn-secondary fab-add'>
+  ＋
+</a>
 
 <!-- 記録一覧 -->
 {% if page_obj %}
@@ -28,7 +41,8 @@
   {% for r in page_obj %}
   <div class='col'>
     <div class='card h-100'>
-      <a href="{% url 'drink_app:detail' r.id %}" style="text-decoration:none; color:inherit;">
+      <a href="{% url 'drink_app:detail' r.id %}" 
+         style="text-decoration:none; color:inherit;">
 
     <!-- 画像 -->
     {% if r.image %}
@@ -52,7 +66,7 @@
             ☆
         {% endif %}
     {% endfor %}
-</div>
+    </div>
 
     <!-- 飲み物名 -->
     <div style='font-weight:600; font-size:13px;'>
@@ -67,13 +81,13 @@
 
 </div>
 
-<!-- ページ移動ボタン -->
+<!-- ページ移動 -->
     {% if page_obj.paginator.num_pages > 1 %}
     <nav aria-label="ページ" style="margin-top: 16px;">
       <ul class="pagination">
         {% if page_obj.has_previous %}
           <li class="page-item">
-            <a class="page-link" href="?q={{ q }}&start={{ start }}&end={{ end }}&drink_type={{ drink_type }}&taste={{ taste }}&total={{ total }}&page={{ num }}">
+          <a class="page-link" href="?q={{ q }}&start={{ start }}&end={{ end }}&drink_type={{ drink_type }}&taste={{ taste }}&total={{ total }}&page={{ page_obj.previous_page_number }}">
 前へ</a>
           </li>
         {% endif %}
@@ -83,7 +97,7 @@
             <li class="page-item active"><span class="page-link">{{ num }}</span></li>
           {% else %}
             <li class="page-item">
-              <a class="page-link" href="?q={{ q }}&start={{ start }}&end={{ end }}&drink_type={{ drink_type }}&taste={{ taste }}&total={{ total }}&page={{ num }}">
+            <a class="page-link" href="?q={{ q }}&start={{ start }}&end={{ end }}&drink_type={{ drink_type }}&taste={{ taste }}&total={{ total }}&page={{ num }}">
 {{ num }}</a>
             </li>
           {% endif %}
@@ -91,7 +105,7 @@
 
         {% if page_obj.has_next %}
           <li class="page-item">
-            <a class="page-link" hhref="?q={{ q }}&start={{ start }}&end={{ end }}&drink_type={{ drink_type }}&taste={{ taste }}&total={{ total }}&page={{ num }}">
+          <a class="page-link" href="?q={{ q }}&start={{ start }}&end={{ end }}&drink_type={{ drink_type }}&taste={{ taste }}&total={{ total }}&page={{ page_obj.next_page_number}}">
 次へ</a>
           </li>
         {% endif %}

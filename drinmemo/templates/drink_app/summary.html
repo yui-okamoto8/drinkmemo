@@ -1,64 +1,70 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 {% block content %}
 
-<h2>好みの傾向</h2>
-
-<hr>
-
-<h4> ◎ よく飲む飲み物</h4>
-{% if top_drink_type %}
-  <p>
-    {{ top_drink_type.drink_type__name }}（{{ top_drink_type.cnt }}件）
-  </p>
-{% else %}
-  <p>まだ記録がありません。</p>
-{% endif %}
-
-<hr>
-
-<div class="row g-3">
-  <div class="col-12">
-    <h4> ♡ 好き（上位3）</h4>
-
-    <p><strong>素材</strong></p>
-    <ul>
-      {% for x in top_like_ingredients %}
-        <li>{{ x.name }}（{{ x.cnt }}）</li>
-      {% empty %}
-        <li>まだありません</li>
-      {% endfor %}
-    </ul>
-
-    <p><strong>味の特徴</strong></p>
-    <ul>
-      {% for x in top_like_features %}
-        <li>{{ x.name }}（{{ x.cnt }}）</li>
-      {% empty %}
-        <li>まだありません</li>
-      {% endfor %}
-    </ul>
-  </div>
-
-  <div class="col-12">
-    <h4> × 苦手（上位3）</h4>
-
-    <p><strong>素材</strong></p>
-    <ul>
-      {% for x in top_dislike_ingredients %}
-        <li>{{ x.name }}（{{ x.cnt }}）</li>
-      {% empty %}
-        <li>まだありません</li>
-      {% endfor %}
-    </ul>
-
-    <p><strong>味の特徴</strong></p>
-    <ul>
-      {% for x in top_dislike_features %}
-        <li>{{ x.name }}（{{ x.cnt }}）</li>
-      {% empty %}
-        <li>まだありません</li>
-      {% endfor %}
-    </ul>
-  </div>
+<div class='summary-fixed-top mb-3'>
+  <h3 class='m-0 fw-bold'>好みの傾向</h3>
 </div>
+
+<div class='px-2'>
+
+  <div class=py-2 mb-3 style='background:#f5f5f5;'>
+    <strong>◎ よく飲む飲み物</strong>
+  </div>
+
+  {% if top_drink_type %}
+    <p class='mb-4'>
+      {{ top_drink_type.drink_type__name }}（{{ top_drink_type.cnt }}件）
+    </p>
+  {% else %}
+    <p class='mb-4'>まだ記録がありません。</p>
+  {% endif %}
+
+  <!-- 好き -->
+  <div class='py-2 mb-2' style='background:#f5f5f5;'>
+    <strong>♡ 好き（上位3）</strong>
+  </div>
+
+  <p class='mb-1'><strong>素材</strong></p>
+  <ul class='mb-3'>
+    {% for x in top_like_ingredients %}
+      <li>{{ x.name }}（{{ x.cnt }}）</li>
+    {% empty %}
+      <li>まだありません</li>
+    {% endfor %}
+  </ul>
+
+  <p class='mb-1'><strong>味の特徴</strong></p>
+  <ul class='mb-4'>
+    {% for x in top_like_features %}
+      <li>{{ x.name }}（{{ x.cnt }}）</li>
+    {% empty %}
+      <li>まだ記録がありません</li>
+    {% endfor %}
+  </ul>
+
+  <!-- 苦手 -->
+  <div class='py-2 mb-2' style='background:#f5f5f5;'>
+    <strong>× 苦手（上位3）</strong>
+  </div>
+
+  <p class='mb-1'><strong>素材</strong></p>
+  <ul class='mb-3'>
+    {% for x in top_dislike_ingredients %}
+      <li>{{ x.name }}（{{ x.cnt }}）</li>
+    {% empty %}
+      <li>まだ記録がありません</li>
+    {% endfor %}
+  </ul>
+
+  <p class='mb-1'><strong>味の特徴</strong></p>
+  <ul>
+    {% for x in top_dislike_features %}
+      <li>{{ x.name }}（{{ x.cnt }}）</li>
+    {% empty %}
+      <li>まだ記録がありません</li>
+    {% endfor %}
+  </ul>
+
+</div>
+
 {% endblock %}

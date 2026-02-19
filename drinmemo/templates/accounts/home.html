@@ -13,7 +13,7 @@
     </h1>
     <br> 
     <br>
-    <!-- サブタイトル -->
+   
     <p style='font-size:19px; font-weight:500; color:#333;'>
        今日は何を飲みましたか？
     </p>
@@ -21,12 +21,14 @@
       〜 飲んだものを記録して好みを知ろう 〜
     </p>
 
-    <div class="mt-4">
-      <a href="{% url 'drink_app:create' %}"
-         class="btn btn-secondary px-4">
+    <!-- 記録ボタン -->
+    <div class='mt-4'>
+      <a href='{% url 'drink_app:create' %}'
+         class='btn btn-secondary px-4'>
         記録する
       </a>
-    
+
+    <!-- 画像 -->
     <div class='text-center mt-5'>
         <img
             src='{% static 'img/home.png' %}'
