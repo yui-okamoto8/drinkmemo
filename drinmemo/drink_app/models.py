@@ -41,14 +41,14 @@ class TasteFeature(TimeStampedModel):
 
 class DrinkRecord(TimeStampedModel):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='drink_records')
-    recorded_date = models.DateField('記録日')
-    drink_name = models.CharField('飲み物名', max_length=100)
+    recorded_date = models.DateField('*記録日')
+    drink_name = models.CharField('*飲み物名', max_length=100)
     store_name = models.CharField('店舗名', max_length=100, blank=True, null=True)
     maker_name = models.CharField('メーカー名', max_length=100, blank=True, null=True)
     TASTE_CHOICES = ((0, '♡好き'), (1, '⚪︎普通'), (2, '×苦手'))
-    taste_rating = models.IntegerField('味の評価', choices=TASTE_CHOICES)
+    taste_rating = models.IntegerField('*味の評価', choices=TASTE_CHOICES)
     RATING_CHOICES = ((0, '☆☆☆'), (1, '★☆☆'), (2, '★★☆'),(3, '★★★'))
-    total_rating = models.IntegerField('総合評価',choices=RATING_CHOICES)
+    total_rating = models.IntegerField('*総合評価',choices=RATING_CHOICES)
     memo = models.TextField('メモ', blank=True, null=True)
     image = models.ImageField('写真', upload_to='drink_records/', blank=True, null=True)
 
@@ -56,14 +56,14 @@ class DrinkRecord(TimeStampedModel):
     DrinkType,
     on_delete=models.PROTECT,
     related_name="drink_records",
-    verbose_name='飲み物の種類',
+    verbose_name='*飲み物の種類',
     )
     
     ingredients = models.ManyToManyField(
     Ingredient,
     through="DrinkRecordIngredient",
     related_name='drink_records',
-    verbose_name='素材',
+    verbose_name='*素材',
     blank=False
     )
 
@@ -71,7 +71,7 @@ class DrinkRecord(TimeStampedModel):
         TasteFeature,
         through='DrinkRecordTasteFeature',
         related_name='drink_records',
-        verbose_name='味の特徴',
+        verbose_name='*味の特徴',
     )
 
     class Meta:

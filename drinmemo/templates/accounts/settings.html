@@ -2,7 +2,13 @@
 {% block content %}
 <div class="container" style="max-width:420px; padding-top:16px;">
 
-  <h5 class="mb-3">アカウント設定</h5>
+<div class="list-fixed-top">
+    
+    <div class="d-flex align-items-center justify-content-between mb-3">
+      <h3 class="m-0" style="font-weight:700;">アカウント設定</h3>
+    </div>
+<br>
+</div>
 
   {# 変更完了メッセージ #}
   {% if messages %}
@@ -13,7 +19,7 @@
     {% endfor %}
   {% endif %}
 
-  {# アカウント名（ユーザー名だけ表示） #}
+  {# アカウント名 #}
   <div class="card mb-3">
     <div class="card-body">
       <div class="mb-2 text-muted" style="font-size:13px;">アカウント名</div>
@@ -31,7 +37,7 @@
     </div>
   </div>
 
-  {# メール・パスワード変更リンク #}
+  {# メール・パスワード変更 #}
   <div class="list-group mb-4">
     <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
        href="{% url 'accounts:email_change' %}">
@@ -45,13 +51,19 @@
     </a>
 </div>
 
+<br>
   {# ログアウト #}
     <form method="post" action="{% url 'accounts:logout' %}">
-     {% csrf_token %}
-     <button type="submit" class="btn btn-outline-danger w-100">
-      ログアウト
-     </button>
+    {% csrf_token %}
+    <div class='mt-2 d-flex justify-content-center'>
+        <div style='width:180px;'>
+        <button type="submit" class="btn btn-danger w-100">
+           ログアウト
+        </button>
+        </div>
+    </div>
     </form>
+
 
 </div>
 

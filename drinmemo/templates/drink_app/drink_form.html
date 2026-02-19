@@ -1,6 +1,12 @@
 {% extends 'base.html' %}
 {% block content %}
-<h2>記録画面</h2>
+
+<div class='summary-fixed-top mb-3'>
+  <h3 class='m-0 fw-bold'>記録画面</h3>
+  <div class="text-muted" style="font-size:12px; margin-top:6px;">
+    　* は入力必須項目です
+  </div>
+</div>
 
 <form method='post' enctype='multipart/form-data'>
   {% csrf_token %}
@@ -44,7 +50,7 @@
     {{ form.drink_type.errors }}
   </div>
 
-<label class="form-label">素材（複数選択）:</label>
+<label class="form-label">*素材（複数選択）:</label>
 
 <div id="ingredients-box" class="form-control"
     style="height: 110px; overflow-y: auto; overflow-x: hidden;">
@@ -56,13 +62,13 @@
 
 <input type="hidden" id="initial-selected-ids" value="{{ selected_ids|join:',' }}">
 
-  <div class="mb-3">
+  <div class="mb-3 mt-3 ">
     {{ form.taste_rating.label_tag }}
     {{ form.taste_rating }}
     {{ form.taste_rating.errors }}
   </div>
 
-<label class="form-label">味の特徴（複数選択）:</label>
+<label class="form-label">*味の特徴（複数選択）:</label>
 
 <div class="form-control" style="height: 110px; overflow-y: auto; overflow-x: hidden;">
   <div style="color:#888; font-size:13px;">
@@ -75,7 +81,7 @@
 
 {{ form.taste_features.errors }}
 
-  <div class="mb-3">
+  <div class="mb-3 mt-3 ">
     {{ form.total_rating.label_tag }}
     {{ form.total_rating }}
     {{ form.total_rating.errors }}
@@ -83,26 +89,29 @@
 
   <div class="mb-3">
     {{ form.memo.label_tag }}
-    {{ form.memo }}
+    <div class="mt-1">{{ form.memo }}</div>
     {{ form.memo.errors }}
   </div>
 
-<div class='d-grid gap-2 mt-4'>
-    <button type='submit' class='btn btn-primary'>
-        保存
+<div class='mt-4 d-flex justify-content-center '>
+  <div style='width:180px;'>
+    <button type='submit' class='btn btn-primary w-100'>
+        保存する
     </button>
-<br>
-    
+  </div>
+</div>
+
 {% if is_edit %}
+<div class="mt-2 d-flex justify-content-center">
+  <div style='width:220px;'>
   <a href='{% url 'drink_app:detail' record.id %}'
     class='btn btn-outline-primary'>
       詳細へ戻る
   </a>
+  </div>
 </div>
-
 {% endif %}
 
-<a href='{% url 'drink_app:list' %}'>←一覧へ戻る</a>
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
@@ -125,7 +134,7 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    // APIから素材取得
+    // 素材取得
     const res = await fetch(`/drink/api/ingredients/?drink_type=${drinkType}`);
     if (!res.ok) {
       ingredientsArea.innerHTML = "<p style='color:red;'>素材の取得に失敗しました</p>";

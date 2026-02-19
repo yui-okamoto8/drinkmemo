@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
 {% block content %}
-<h2>フィルター検索</h2>
+<div class='summary-fixed-top mb-3'>
+  <h3 class='m-0 fw-bold'>フィルター検索</h3>
+</div>
+
 
 <form method="get" action="{% url 'drink_app:list' %}">
 
@@ -37,7 +40,7 @@
   </div>
 
   <!-- 味の評価 -->
-  <div class="mb-3">
+  <div class="mb-3 mt-3">
     {{ form.taste.label_tag }}
     {{ form.taste }}
   </div>
@@ -57,14 +60,26 @@
   </div>
   </div>
 
-  <div class='d-grid gap-2'>
-    <button type='submit' class='btn btn-primary'>検索する</button>
-    <a class='btn btn-outline-secondary' href="{% url 'drink_app:filter' %}">
-    条件をクリア
-  </a>
-    {% comment %} <a class='btn btn-outline-secondary' href='{% url 'drink_app:list' %}'>一覧へ戻る</a> {% endcomment %}
-    <a href="{% url 'drink_app:list' %}">← 一覧へ戻る</a>
+  <div class='mt-4 d-flex justify-content-center'>
+    <div style='width:180px;'>
+    <button type='submit' class='btn btn-primary w-100'>
+    検索する
+    </button>
+    </div>
   </div>
+
+  <div class='mt-2 d-flex justify-content-center'>
+    <div style='width:180px;'>
+    <a class='btn btn-outline-secondary w-100' 
+       href="{% url 'drink_app:filter' %}">
+    条件をクリア
+    </a>
+    </div>
+  </div>
+
+  {% comment %} <div class='mt-3 text-end'>
+    <a href='{% url 'drink_app:list' %}' class='text-decoration-none small'>← 一覧へ戻る</a>
+  </div> {% endcomment %}
 </form>
 
 

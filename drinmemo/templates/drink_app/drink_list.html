@@ -84,7 +84,7 @@
 <!-- ページ移動 -->
     {% if page_obj.paginator.num_pages > 1 %}
     <nav aria-label="ページ" style="margin-top: 16px;">
-      <ul class="pagination">
+      <ul class="pagination pagination-sm justify-content-center">
         {% if page_obj.has_previous %}
           <li class="page-item">
           <a class="page-link" href="?q={{ q }}&start={{ start }}&end={{ end }}&drink_type={{ drink_type }}&taste={{ taste }}&total={{ total }}&page={{ page_obj.previous_page_number }}">
