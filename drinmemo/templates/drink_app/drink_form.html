@@ -2,9 +2,12 @@
 {% block content %}
 
 <div class='summary-fixed-top mb-3'>
-  <h3 class='m-0 fw-bold'>記録画面</h3>
-  <div class="text-muted" style="font-size:12px; margin-top:6px;">
-    　* は入力必須項目です
+  <h3 class='m-0 fw-bold'>
+    {% if is_edit %}登録内容の編集{% else %}記録画面{% endif %}
+  </h3>
+
+  <div class='text-muted' style='font-size:12px; margin-top:6px;'>
+    　*は入力必須項目です
   </div>
 </div>
 
@@ -103,9 +106,9 @@
 
 {% if is_edit %}
 <div class="mt-2 d-flex justify-content-center">
-  <div style='width:220px;'>
+  <div style='width:180px;'>
   <a href='{% url 'drink_app:detail' record.id %}'
-    class='btn btn-outline-primary'>
+    class='btn btn-outline-secondary w-100'>
       詳細へ戻る
   </a>
   </div>

@@ -2,15 +2,14 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
-from django.contrib.auth import get_user_model
-
 
 User = get_user_model()
 
 class RegistForm(forms.ModelForm):
 
     confirm_password = forms.CharField(
-        label='パスワード再入力', widget=forms.PasswordInput()
+        label='パスワード再入力', 
+        widget=forms.PasswordInput(attrs={"class": "form-control"})
     )
 
     class Meta():
@@ -22,20 +21,29 @@ class RegistForm(forms.ModelForm):
             'password' : 'パスワード'
         }
         widgets = {
-            'password': forms.PasswordInput()
+            'username': forms.TextInput(attrs={"class": "form-control"}),
+            'email': forms.EmailInput(attrs={"class": "form-control"}),
+            'password': forms.PasswordInput(attrs={"class": "form-control"}),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for name in ["username", "email", "password"]:
+            if name in self.fields:
+                self.fields[name].widget.attrs.setdefault("class", "form-control")
 
     def clean(self):
         cleaned_data = super().clean()
         password = cleaned_data.get('password')
         confirm_password = cleaned_data.get('confirm_password')
-        if password != confirm_password:
+        if password and confirm_password and password != confirm_password:
             self.add_error('password', 'パスワードが一致しません')
-        try:
-            validate_password(password, self.instance)
-        except ValidationError as e:
-            self.add_error('password', e)
-
+        if password:
+            try:
+                validate_password(password, self.instance)
+            except ValidationError as e:
+                self.add_error('password', e)
+                
         return cleaned_data
 
     def save(self, commit=True):
@@ -63,6 +71,4 @@ class EmailChangeForm(forms.ModelForm):
             "email": forms.EmailInput(attrs={"class": "form-control"})
         }
 
-# class UserActivateForm(forms.Form):
-#     token = forms.CharField(widget=forms.HiddenInput())
 

@@ -1,17 +1,63 @@
 {% extends 'base_auth.html' %}
 {% block content %}
 
-<h4 class="mb-3">ログイン</h4>
-
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit" class="btn btn-primary w-30">ログイン</button>
-</form>
-
-<div class="mt-3">
-  <a href="{% url 'accounts:regist' %}">新規アカウント登録</a>
+<div class="text-center"
+     style="background:#f6d9b8; padding:14px 0; border-radius:6px;">
+  <div style="color:#7b3f00; font-weight:800; font-size:34px; line-height:1;">
+    Drink Memo
+  </div>
 </div>
+
+<br>
+<!-- フォーム -->
+<div class="mt-5" style="max-width:360px; margin:0 auto;">
+
+  <form method="post">
+    {% csrf_token %}
+
+    {% if form.non_field_errors %}
+      <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+    {% endif %}
+
+    <!-- メール -->
+    <div class="mb-4">
+      <label class="form-label text-muted">メールアドレス</label>
+      {{ form.username }}
+      {{ form.username.errors }}
+    </div>
+
+    <!-- パスワード -->
+    <div class="mb-4">
+      <label class="form-label text-muted">パスワード</label>
+      {{ form.password }}
+      {{ form.password.errors }}
+    </div>
+<br>
+    <!-- ログインボタン -->
+    <div class="text-center mt-4">
+      <button type="submit" class="btn btn-primary px-5">ログイン</button>
+    </div>
+  </form>
+
+  <!-- 新規登録 -->
+  <div class="text-center mt-4">
+    <a href="{% url 'accounts:regist' %}"
+       class="text-decoration-none">
+      新規アカウント登録
+    </a>
+  </div>
+
+</div>
+
+<!-- 入力欄を “箱っぽく” するための最低限のCSS（このページだけ） -->
+<style>
+  input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #bbb;
+    border-radius: 4px;
+  }
+</style>
 
 {% endblock %}
 

@@ -22,7 +22,7 @@ class DrinkRecordForm(forms.ModelForm):
 
         widgets = {
             'recorded_date': forms.DateInput(attrs={'type': 'date'}),
-            'memo': forms.Textarea(attrs={'rows': 3}),
+            'memo': forms.Textarea(attrs={'class':'form-control', 'rows': 3}),
             'ingredients': forms.CheckboxSelectMultiple(attrs={'size':'8'}),
             'taste_features': forms.CheckboxSelectMultiple(),
         }
