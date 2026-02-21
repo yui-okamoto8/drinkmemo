@@ -6,11 +6,12 @@ from django.core.paginator import Paginator
 from django.http import JsonResponse
 from django.urls import reverse
 from urllib.parse import urlencode
+from django.db.models import Case, When, Value, IntegerField
 
 from .models import DrinkRecord, Ingredient, TasteFeature, DrinkType
 
 
-
+#記録一覧
 @login_required
 def drink_list(request):
 
@@ -76,6 +77,7 @@ def drink_list(request):
         })
 
 
+#記録画面
 @login_required 
 def drink_create(request):
     form = DrinkRecordForm(request.POST or None, request.FILES or None)
@@ -88,17 +90,23 @@ def drink_create(request):
         
     return render(request, 'drink_app/drink_form.html', {'form': form})
 
+
 @login_required
 def ingredients_filter(request):
     drink_type_id = request.GET.get('drink_type')
     if not drink_type_id:
         return JsonResponse({'ingredients': []})
 
-    qs = Ingredient.objects.filter(drink_type_id=drink_type_id).order_by('name')
+    qs = Ingredient.objects.filter(drink_type_id=drink_type_id).annotate(
+            is_other=Case(
+                When(name='その他', then=Value(1)),
+                default=Value(0),
+                output_field=IntegerField(),
+            )
+        ).order_by('is_other', 'name')    
+     
     data = [{'id': ing.id, 'name': ing.name} for ing in qs]
     return JsonResponse({'ingredients': data})
-
-
 
 
 @login_required
@@ -137,6 +145,7 @@ def drink_delete(request, pk):
 
     return render(request, 'drink_app/drink_confirm_delete.html', {'record': record})
 
+#フィルター
 @login_required
 def drink_filter(request):
     form = DrinkFilterForm(request.GET or None)
