@@ -32,11 +32,11 @@ class UserLoginView(LoginView):
 def account_settings(request):
     user = request.user
 
-    # モーダル用フォーム（初期値は現在のusername）
+    # モーダル
     username_form = UsernameChangeForm(instance=user)
 
     if request.method == "POST":
-        # ユーザー名変更だけこの画面で受ける
+        # ユーザー名変更だけこの画面
         username_form = UsernameChangeForm(request.POST, instance=user)
         if username_form.is_valid():
             username_form.save()
@@ -45,11 +45,9 @@ def account_settings(request):
         else:
             messages.error(request, "入力内容を確認してください")
 
-    # パスワード変更後のクエリでメッセージ表示（?pw=1）
     if request.GET.get("pw") == "1":
         messages.success(request, "パスワードを変更できました")
 
-    # メール変更後のクエリでメッセージ表示（?email=1）
     if request.GET.get("email") == "1":
         messages.success(request, "メールアドレスを変更できました")
 

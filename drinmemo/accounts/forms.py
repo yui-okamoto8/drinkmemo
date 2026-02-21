@@ -43,7 +43,7 @@ class RegistForm(forms.ModelForm):
                 validate_password(password, self.instance)
             except ValidationError as e:
                 self.add_error('password', e)
-                
+
         return cleaned_data
 
     def save(self, commit=True):

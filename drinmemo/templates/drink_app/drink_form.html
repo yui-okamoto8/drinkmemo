@@ -131,7 +131,7 @@ document.addEventListener("DOMContentLoaded", () => {
   async function refreshIngredients() {
     const drinkType = drinkTypeEl.value;
 
-    // drink_type が未選択（"-----"）なら素材は空表示
+    // drink_type が未選択なら素材は空表示
     if (!drinkType) {
       ingredientsArea.innerHTML = "";
       return;
@@ -145,7 +145,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     const data = await res.json();
 
-    // チェックボックス描画
+    // チェックボックス
     ingredientsArea.innerHTML = "";
     data.ingredients.forEach(item => {
       const id = `ing_${item.id}`;

@@ -156,7 +156,7 @@ def drink_filter(request):
 def summary(request):
     base_qs = DrinkRecord.objects.filter(user=request.user)
 
-    # よく飲む飲み物（drink_type最多）
+    # よく飲む飲み物
     top_drink_type = (
         base_qs.values('drink_type__name')
         .annotate(cnt=Count('id'))
