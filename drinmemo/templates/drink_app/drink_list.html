@@ -29,10 +29,11 @@
 </div>
 
 <!-- 記録追加ボタン -->
-<a href='{% url 'drink_app:create' %}'
-   class='btn btn-secondary fab-add'>
-  ＋
+<div class="fab-add">
+  <a href="{% url 'drink_app:create' %}" class="btn btn-secondary">
+    ＋
 </a>
+</div>
 
 <!-- 記録一覧 -->
 {% if page_obj %}
@@ -74,10 +75,9 @@
     </div>
     
     <!-- 記録日 -->
-    <div style='font-weight:600; font-size:10px;'>
+    <div style='font-weight:600; font-size:11px;'>
         {{ r.recorded_date }}
     </div>
-
     </div>
     </a>
     </div>
