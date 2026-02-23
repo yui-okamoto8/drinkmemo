@@ -1,0 +1,763 @@
+[
+{
+  "model": "drink_app.drinktype",
+  "pk": 1,
+  "fields": {
+    "created_at": "2026-02-15T06:13:53.923Z",
+    "updated_at": "2026-02-15T06:13:53.923Z",
+    "name": "コーヒー"
+  }
+},
+{
+  "model": "drink_app.drinktype",
+  "pk": 2,
+  "fields": {
+    "created_at": "2026-02-15T06:13:57.993Z",
+    "updated_at": "2026-02-15T06:13:57.993Z",
+    "name": "紅茶"
+  }
+},
+{
+  "model": "drink_app.drinktype",
+  "pk": 3,
+  "fields": {
+    "created_at": "2026-02-15T06:14:02.513Z",
+    "updated_at": "2026-02-15T06:14:02.513Z",
+    "name": "ハーブティー"
+  }
+},
+{
+  "model": "drink_app.drinktype",
+  "pk": 4,
+  "fields": {
+    "created_at": "2026-02-15T06:14:05.745Z",
+    "updated_at": "2026-02-15T06:14:05.745Z",
+    "name": "その他"
+  }
+},
+{
+  "model": "drink_app.ingredient",
+  "pk": 1,
+  "fields": {
+    "created_at": "2026-02-15T06:36:11.172Z",
+    "updated_at": "2026-02-15T06:36:11.172Z",
+    "drink_type": 1,
+    "name": "キリマンジャロ"
+  }
+},
+{
+  "model": "drink_app.ingredient",
+  "pk": 2,
+  "fields": {
+    "created_at": "2026-02-15T06:36:22.130Z",
+    "updated_at": "2026-02-15T06:36:26.514Z",
+    "drink_type": 1,
+    "name": "ブルーマウンテン"
+  }
+},
+{
+  "model": "drink_app.ingredient",
+  "pk": 3,
+  "fields": {
+    "created_at": "2026-02-15T06:43:50.595Z",
+    "updated_at": "2026-02-15T06:43:50.595Z",
+    "drink_type": 1,
+    "name": "モカ"
+  }
+},
+{
+  "model": "drink_app.ingredient",
+  "pk": 4,
+  "fields": {
+    "created_at": "2026-02-15T06:43:56.642Z",
+    "updated_at": "2026-02-15T06:43:56.642Z",
+    "drink_type": 1,
+    "name": "ブラジル"
+  }
+},
+{
+  "model": "drink_app.ingredient",
+  "pk": 5,
+  "fields": {
+    "created_at": "2026-02-15T06:44:04.204Z",
+    "updated_at": "2026-02-15T06:44:04.204Z",
+    "drink_type": 1,
+    "name": "コロンビア"
+  }
+},
+{
+  "model": "drink_app.ingredient",
+  "pk": 6,
+  "fields": {
+    "created_at": "2026-02-15T06:44:11.648Z",
+    "updated_at": "2026-02-15T06:44:11.648Z",
+    "drink_type": 1,
+    "name": "グアテマラ"
+  }
+},
+{
+  "model": "drink_app.ingredient",
+  "pk": 7,
+  "fields": {
+    "created_at": "2026-02-15T06:44:53.545Z",
+    "updated_at": "2026-02-15T06:44:53.545Z",
+    "drink_type": 1,
+    "name": "マンデリン"
+  }
+},
+{
+  "model": "drink_app.ingredient",
+  "pk": 8,
+  "fields": {
+    "created_at": "2026-02-15T06:45:06.432Z",
+    "updated_at": "2026-02-15T06:45:06.432Z",
+    "drink_type": 1,
+    "name": "コナ"
+  }
+},
+{
+  "model": "drink_app.ingredient",
+  "pk": 9,
+  "fields": {
+    "created_at": "2026-02-15T06:45:55.128Z",
+    "updated_at": "2026-02-15T06:45:55.128Z",
+    "drink_type": 1,
+    "name": "トラジャ"
+  }
+},
+{
+  "model": "drink_app.ingredient",
+  "pk": 10,
+  "fields": {
+    "created_at": "2026-02-15T06:46:43.703Z",
+    "updated_at": "2026-02-15T06:46:43.703Z",
+    "drink_type": 1,
+    "name": "ブレンド"
+  }
+},
+{
+  "model": "drink_app.ingredient",
+  "pk": 11,
+  "fields": {
+    "created_at": "2026-02-15T06:46:54.292Z",
+    "updated_at": "2026-02-15T06:46:54.292Z",
+    "drink_type": 1,
+    "name": "その他"
+  }
+},
+{
+  "model": "drink_app.ingredient",
+  "pk": 12,
+  "fields": {
+    "created_at": "2026-02-15T06:48:32.718Z",
+    "updated_at": "2026-02-15T06:48:32.718Z",
+    "drink_type": 2,
+    "name": "ダージリン"
+  }
+},
+{
+  "model": "drink_app.ingredient",
+  "pk": 13,
+  "fields": {
+    "created_at": "2026-02-15T06:49:05.071Z",
+    "updated_at": "2026-02-15T06:49:05.071Z",
+    "drink_type": 2,
+    "name": "アッサム"
+  }
+},
+{
+  "model": "drink_app.ingredient",
+  "pk": 14,
+  "fields": {
+    "created_at": "2026-02-15T06:49:16.075Z",
+    "updated_at": "2026-02-15T06:49:16.075Z",
+    "drink_type": 2,
+    "name": "ウバ"
+  }
+},
+{
+  "model": "drink_app.ingredient",
+  "pk": 15,
+  "fields": {
+    "created_at": "2026-02-15T06:49:40.255Z",
+    "updated_at": "2026-02-15T06:49:40.255Z",
+    "drink_type": 2,
+    "name": "ティンブラ"
+  }
+},
+{
+  "model": "drink_app.ingredient",
+  "pk": 16,
+  "fields": {
+    "created_at": "2026-02-15T06:50:20.385Z",
+    "updated_at": "2026-02-15T06:50:20.385Z",
+    "drink_type": 2,
+    "name": "キーマン"
+  }
+},
+{
+  "model": "drink_app.ingredient",
+  "pk": 17,
+  "fields": {
+    "created_at": "2026-02-15T06:50:26.497Z",
+    "updated_at": "2026-02-15T06:50:26.497Z",
+    "drink_type": 2,
+    "name": "ニルギリ"
+  }
+},
+{
+  "model": "drink_app.ingredient",
+  "pk": 18,
+  "fields": {
+    "created_at": "2026-02-15T06:50:39.758Z",
+    "updated_at": "2026-02-15T06:50:39.758Z",
+    "drink_type": 2,
+    "name": "アールグレイ"
+  }
+},
+{
+  "model": "drink_app.ingredient",
+  "pk": 19,
+  "fields": {
+    "created_at": "2026-02-15T06:51:06.884Z",
+    "updated_at": "2026-02-15T06:51:06.884Z",
+    "drink_type": 2,
+    "name": "セイロン"
+  }
+},
+{
+  "model": "drink_app.ingredient",
+  "pk": 20,
+  "fields": {
+    "created_at": "2026-02-15T06:51:20.654Z",
+    "updated_at": "2026-02-15T06:51:44.194Z",
+    "drink_type": 2,
+    "name": "イングリッシュ・ブレックファスト"
+  }
+},
+{
+  "model": "drink_app.ingredient",
+  "pk": 21,
+  "fields": {
+    "created_at": "2026-02-15T06:52:58.518Z",
+    "updated_at": "2026-02-15T06:52:58.518Z",
+    "drink_type": 2,
+    "name": "キャンディ"
+  }
+},
+{
+  "model": "drink_app.ingredient",
+  "pk": 22,
+  "fields": {
+    "created_at": "2026-02-15T06:53:27.746Z",
+    "updated_at": "2026-02-15T06:53:27.746Z",
+    "drink_type": 2,
+    "name": "レディグレイ"
+  }
+},
+{
+  "model": "drink_app.ingredient",
+  "pk": 23,
+  "fields": {
+    "created_at": "2026-02-15T06:53:33.155Z",
+    "updated_at": "2026-02-15T06:54:08.996Z",
+    "drink_type": 2,
+    "name": "オレンジペコ"
+  }
+},
+{
+  "model": "drink_app.ingredient",
+  "pk": 24,
+  "fields": {
+    "created_at": "2026-02-15T06:54:14.410Z",
+    "updated_at": "2026-02-15T06:54:31.160Z",
+    "drink_type": 2,
+    "name": "ルフナ"
+  }
+},
+{
+  "model": "drink_app.ingredient",
+  "pk": 25,
+  "fields": {
+    "created_at": "2026-02-15T06:54:36.317Z",
+    "updated_at": "2026-02-15T06:54:36.317Z",
+    "drink_type": 2,
+    "name": "その他"
+  }
+},
+{
+  "model": "drink_app.ingredient",
+  "pk": 26,
+  "fields": {
+    "created_at": "2026-02-15T06:55:42.443Z",
+    "updated_at": "2026-02-15T06:55:42.443Z",
+    "drink_type": 3,
+    "name": "カモミール"
+  }
+},
+{
+  "model": "drink_app.ingredient",
+  "pk": 27,
+  "fields": {
+    "created_at": "2026-02-15T06:55:48.658Z",
+    "updated_at": "2026-02-15T06:55:48.658Z",
+    "drink_type": 3,
+    "name": "エルダーフラワー"
+  }
+},
+{
+  "model": "drink_app.ingredient",
+  "pk": 28,
+  "fields": {
+    "created_at": "2026-02-15T06:56:00.136Z",
+    "updated_at": "2026-02-15T06:56:00.136Z",
+    "drink_type": 3,
+    "name": "エキナセア"
+  }
+},
+{
+  "model": "drink_app.ingredient",
+  "pk": 29,
+  "fields": {
+    "created_at": "2026-02-15T06:56:11.859Z",
+    "updated_at": "2026-02-15T06:56:11.859Z",
+    "drink_type": 3,
+    "name": "ジンジャー"
+  }
+},
+{
+  "model": "drink_app.ingredient",
+  "pk": 30,
+  "fields": {
+    "created_at": "2026-02-15T06:56:17.009Z",
+    "updated_at": "2026-02-15T06:56:17.009Z",
+    "drink_type": 3,
+    "name": "セージ"
+  }
+},
+{
+  "model": "drink_app.ingredient",
+  "pk": 31,
+  "fields": {
+    "created_at": "2026-02-15T06:56:24.922Z",
+    "updated_at": "2026-02-15T06:56:24.922Z",
+    "drink_type": 3,
+    "name": "ラベンダー"
+  }
+},
+{
+  "model": "drink_app.ingredient",
+  "pk": 32,
+  "fields": {
+    "created_at": "2026-02-15T06:56:30.825Z",
+    "updated_at": "2026-02-15T06:56:30.825Z",
+    "drink_type": 3,
+    "name": "ハイビスカス"
+  }
+},
+{
+  "model": "drink_app.ingredient",
+  "pk": 33,
+  "fields": {
+    "created_at": "2026-02-15T06:56:40.162Z",
+    "updated_at": "2026-02-15T06:56:40.162Z",
+    "drink_type": 3,
+    "name": "フェンネル"
+  }
+},
+{
+  "model": "drink_app.ingredient",
+  "pk": 34,
+  "fields": {
+    "created_at": "2026-02-15T06:56:45.473Z",
+    "updated_at": "2026-02-15T06:56:45.473Z",
+    "drink_type": 3,
+    "name": "レモングラス"
+  }
+},
+{
+  "model": "drink_app.ingredient",
+  "pk": 35,
+  "fields": {
+    "created_at": "2026-02-15T06:56:54.119Z",
+    "updated_at": "2026-02-15T06:56:54.120Z",
+    "drink_type": 3,
+    "name": "ペパーミント"
+  }
+},
+{
+  "model": "drink_app.ingredient",
+  "pk": 36,
+  "fields": {
+    "created_at": "2026-02-15T06:57:05.170Z",
+    "updated_at": "2026-02-15T06:57:05.170Z",
+    "drink_type": 3,
+    "name": "リコリス"
+  }
+},
+{
+  "model": "drink_app.ingredient",
+  "pk": 37,
+  "fields": {
+    "created_at": "2026-02-15T06:57:11.456Z",
+    "updated_at": "2026-02-15T06:57:11.456Z",
+    "drink_type": 3,
+    "name": "ルイボス"
+  }
+},
+{
+  "model": "drink_app.ingredient",
+  "pk": 38,
+  "fields": {
+    "created_at": "2026-02-15T06:57:19.641Z",
+    "updated_at": "2026-02-15T06:57:19.641Z",
+    "drink_type": 3,
+    "name": "レモンバーム"
+  }
+},
+{
+  "model": "drink_app.ingredient",
+  "pk": 39,
+  "fields": {
+    "created_at": "2026-02-15T06:57:25.989Z",
+    "updated_at": "2026-02-15T06:57:25.989Z",
+    "drink_type": 3,
+    "name": "ローズヒップ"
+  }
+},
+{
+  "model": "drink_app.ingredient",
+  "pk": 40,
+  "fields": {
+    "created_at": "2026-02-15T06:57:52.541Z",
+    "updated_at": "2026-02-15T06:57:52.541Z",
+    "drink_type": 3,
+    "name": "ローズマリー"
+  }
+},
+{
+  "model": "drink_app.ingredient",
+  "pk": 41,
+  "fields": {
+    "created_at": "2026-02-15T06:57:59.398Z",
+    "updated_at": "2026-02-15T06:57:59.398Z",
+    "drink_type": 3,
+    "name": "ターメリック"
+  }
+},
+{
+  "model": "drink_app.ingredient",
+  "pk": 42,
+  "fields": {
+    "created_at": "2026-02-15T06:58:19.941Z",
+    "updated_at": "2026-02-15T06:58:19.941Z",
+    "drink_type": 3,
+    "name": "シナモン"
+  }
+},
+{
+  "model": "drink_app.ingredient",
+  "pk": 43,
+  "fields": {
+    "created_at": "2026-02-15T06:58:34.859Z",
+    "updated_at": "2026-02-15T06:58:34.859Z",
+    "drink_type": 3,
+    "name": "ネトル"
+  }
+},
+{
+  "model": "drink_app.ingredient",
+  "pk": 44,
+  "fields": {
+    "created_at": "2026-02-15T06:59:12.357Z",
+    "updated_at": "2026-02-15T06:59:12.357Z",
+    "drink_type": 3,
+    "name": "オレンジピール"
+  }
+},
+{
+  "model": "drink_app.ingredient",
+  "pk": 45,
+  "fields": {
+    "created_at": "2026-02-15T06:59:22.033Z",
+    "updated_at": "2026-02-15T06:59:22.033Z",
+    "drink_type": 3,
+    "name": "アニスシード"
+  }
+},
+{
+  "model": "drink_app.ingredient",
+  "pk": 46,
+  "fields": {
+    "created_at": "2026-02-15T06:59:33.770Z",
+    "updated_at": "2026-02-15T06:59:33.770Z",
+    "drink_type": 3,
+    "name": "キャラウェイ"
+  }
+},
+{
+  "model": "drink_app.ingredient",
+  "pk": 47,
+  "fields": {
+    "created_at": "2026-02-15T06:59:47.336Z",
+    "updated_at": "2026-02-15T06:59:47.336Z",
+    "drink_type": 3,
+    "name": "コリアンダー"
+  }
+},
+{
+  "model": "drink_app.ingredient",
+  "pk": 48,
+  "fields": {
+    "created_at": "2026-02-15T07:00:03.588Z",
+    "updated_at": "2026-02-15T07:00:03.588Z",
+    "drink_type": 3,
+    "name": "タイム"
+  }
+},
+{
+  "model": "drink_app.ingredient",
+  "pk": 49,
+  "fields": {
+    "created_at": "2026-02-15T07:00:38.488Z",
+    "updated_at": "2026-02-15T07:00:38.488Z",
+    "drink_type": 3,
+    "name": "レモンピール"
+  }
+},
+{
+  "model": "drink_app.ingredient",
+  "pk": 50,
+  "fields": {
+    "created_at": "2026-02-15T07:00:47.576Z",
+    "updated_at": "2026-02-15T07:00:47.576Z",
+    "drink_type": 3,
+    "name": "カルダモン"
+  }
+},
+{
+  "model": "drink_app.ingredient",
+  "pk": 51,
+  "fields": {
+    "created_at": "2026-02-15T07:00:57.498Z",
+    "updated_at": "2026-02-15T07:00:57.498Z",
+    "drink_type": 3,
+    "name": "ドクダミ"
+  }
+},
+{
+  "model": "drink_app.ingredient",
+  "pk": 52,
+  "fields": {
+    "created_at": "2026-02-15T07:01:06.826Z",
+    "updated_at": "2026-02-15T07:01:06.826Z",
+    "drink_type": 3,
+    "name": "ハトムギ"
+  }
+},
+{
+  "model": "drink_app.ingredient",
+  "pk": 53,
+  "fields": {
+    "created_at": "2026-02-15T07:02:27.631Z",
+    "updated_at": "2026-02-15T07:02:27.631Z",
+    "drink_type": 4,
+    "name": "その他"
+  }
+},
+{
+  "model": "drink_app.ingredient",
+  "pk": 54,
+  "fields": {
+    "created_at": "2026-02-21T14:50:52.413Z",
+    "updated_at": "2026-02-21T14:50:52.413Z",
+    "drink_type": 1,
+    "name": "ミルク"
+  }
+},
+{
+  "model": "drink_app.ingredient",
+  "pk": 55,
+  "fields": {
+    "created_at": "2026-02-21T14:51:06.565Z",
+    "updated_at": "2026-02-21T14:51:06.566Z",
+    "drink_type": 1,
+    "name": "ミルク(オーツミルク)"
+  }
+},
+{
+  "model": "drink_app.ingredient",
+  "pk": 56,
+  "fields": {
+    "created_at": "2026-02-21T14:51:35.315Z",
+    "updated_at": "2026-02-21T14:51:35.315Z",
+    "drink_type": 1,
+    "name": "ミルク(豆乳)"
+  }
+},
+{
+  "model": "drink_app.ingredient",
+  "pk": 57,
+  "fields": {
+    "created_at": "2026-02-21T14:51:47.554Z",
+    "updated_at": "2026-02-21T14:51:47.554Z",
+    "drink_type": 1,
+    "name": "ミルク(アーモンドミルク)"
+  }
+},
+{
+  "model": "drink_app.ingredient",
+  "pk": 58,
+  "fields": {
+    "created_at": "2026-02-21T14:51:54.020Z",
+    "updated_at": "2026-02-21T14:51:54.020Z",
+    "drink_type": 2,
+    "name": "ミルク"
+  }
+},
+{
+  "model": "drink_app.ingredient",
+  "pk": 59,
+  "fields": {
+    "created_at": "2026-02-21T14:52:12.607Z",
+    "updated_at": "2026-02-21T14:52:12.607Z",
+    "drink_type": 3,
+    "name": "ミルク"
+  }
+},
+{
+  "model": "drink_app.tastefeature",
+  "pk": 1,
+  "fields": {
+    "created_at": "2026-02-18T02:14:04.229Z",
+    "updated_at": "2026-02-18T02:14:04.229Z",
+    "name": "甘い"
+  }
+},
+{
+  "model": "drink_app.tastefeature",
+  "pk": 2,
+  "fields": {
+    "created_at": "2026-02-18T02:14:08.305Z",
+    "updated_at": "2026-02-18T02:14:08.305Z",
+    "name": "苦い"
+  }
+},
+{
+  "model": "drink_app.tastefeature",
+  "pk": 3,
+  "fields": {
+    "created_at": "2026-02-18T02:14:12.828Z",
+    "updated_at": "2026-02-18T02:14:12.828Z",
+    "name": "酸味がある"
+  }
+},
+{
+  "model": "drink_app.tastefeature",
+  "pk": 4,
+  "fields": {
+    "created_at": "2026-02-18T02:14:20.282Z",
+    "updated_at": "2026-02-18T02:14:20.282Z",
+    "name": "香りが強い"
+  }
+},
+{
+  "model": "drink_app.tastefeature",
+  "pk": 5,
+  "fields": {
+    "created_at": "2026-02-18T02:14:48.673Z",
+    "updated_at": "2026-02-18T02:14:48.673Z",
+    "name": "フルーティー"
+  }
+},
+{
+  "model": "drink_app.tastefeature",
+  "pk": 6,
+  "fields": {
+    "created_at": "2026-02-18T02:14:55.534Z",
+    "updated_at": "2026-02-18T02:14:55.534Z",
+    "name": "スパイシー"
+  }
+},
+{
+  "model": "drink_app.tastefeature",
+  "pk": 8,
+  "fields": {
+    "created_at": "2026-02-18T02:15:20.141Z",
+    "updated_at": "2026-02-18T02:17:02.636Z",
+    "name": "スモーキー"
+  }
+},
+{
+  "model": "drink_app.tastefeature",
+  "pk": 10,
+  "fields": {
+    "created_at": "2026-02-18T02:16:05.136Z",
+    "updated_at": "2026-02-18T02:16:05.136Z",
+    "name": "スッキリ"
+  }
+},
+{
+  "model": "drink_app.tastefeature",
+  "pk": 11,
+  "fields": {
+    "created_at": "2026-02-18T02:16:09.720Z",
+    "updated_at": "2026-02-18T02:16:09.720Z",
+    "name": "クリーミー"
+  }
+},
+{
+  "model": "drink_app.tastefeature",
+  "pk": 12,
+  "fields": {
+    "created_at": "2026-02-18T02:17:16.951Z",
+    "updated_at": "2026-02-18T02:17:16.951Z",
+    "name": "濃い"
+  }
+},
+{
+  "model": "drink_app.tastefeature",
+  "pk": 13,
+  "fields": {
+    "created_at": "2026-02-18T02:17:19.412Z",
+    "updated_at": "2026-02-18T02:17:19.412Z",
+    "name": "薄い"
+  }
+},
+{
+  "model": "drink_app.tastefeature",
+  "pk": 15,
+  "fields": {
+    "created_at": "2026-02-18T02:18:01.511Z",
+    "updated_at": "2026-02-18T02:18:01.511Z",
+    "name": "爽やか"
+  }
+},
+{
+  "model": "drink_app.tastefeature",
+  "pk": 16,
+  "fields": {
+    "created_at": "2026-02-18T02:18:12.358Z",
+    "updated_at": "2026-02-18T02:18:12.358Z",
+    "name": "渋い"
+  }
+},
+{
+  "model": "drink_app.tastefeature",
+  "pk": 17,
+  "fields": {
+    "created_at": "2026-02-18T02:19:15.847Z",
+    "updated_at": "2026-02-18T02:19:15.847Z",
+    "name": "香ばしい"
+  }
+},
+{
+  "model": "drink_app.tastefeature",
+  "pk": 18,
+  "fields": {
+    "created_at": "2026-02-18T02:19:20.901Z",
+    "updated_at": "2026-02-18T02:19:56.754Z",
+    "name": "コクがある"
+  }
+}
+]
