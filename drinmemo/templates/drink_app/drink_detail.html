@@ -36,25 +36,30 @@
     <p>店舗名： {{ record.store_name|default:'-' }}</p>
     <p>メーカー名： {{ record.maker_name|default:'-'}}</p>
 
-    <p>素材： </p>
-    <ul>
+    <div class="mb-2 d-flex">
+    <div style="width:90px;">素材 :</div>
+    <div>
     {% for ing in record.ingredients.all %}
-        <li>{{ ing.name }}</li>
+      <span class="badge bg-light text-dark border me-1 mb-1">{{ ing.name }}</span>
     {% empty %}
-        <li>未選択</li>
+      <span class="text-muted">未選択</span>
     {% endfor %}
-    </ul>
+    </div>
+    </div>
 
     <p>味の評価： {{ record.get_taste_rating_display }}</p>
 
-    <p>味の特徴：</p>
-    <ul>
+  <div class="mb-2 d-flex">
+  <div style="width:90px;">味の特徴 :
+  </div>
+  <div>
     {% for tf in record.taste_features.all %}
-        <li>{{ tf.name }}</li>
+      <span class="badge bg-light text-dark border me-1 mb-1">{{ tf.name }}</span>
     {% empty %}
-        <li>未選択</li>
+      <span class="text-muted">未選択</span>
     {% endfor %}
-    </ul>
+  </div>
+  </div>
 
     <p>総合評価：
     <span style='font-size:18px; color:#f5b301;'>
@@ -100,7 +105,7 @@
 
 
 <div class='modal fade' id='deleteModal' tabindex='-1'>
-  <div class='modal-dialog'>
+  <div class='modal-dialog modal-dialog-centered'>
     <div class='modal-content'>
 
       <div class='modal-header'>

@@ -54,6 +54,7 @@ def drink_list(request):
             records = records.filter(ingredients__id__in=ids).distinct()
 
     taste_feature_ids = request.GET.getlist('taste_features')
+    ids = [int(x) for x in ingredients_param.split(",") if x.isdigit()]
     if taste_feature_ids:
         records = records.filter(taste_features__id__in=taste_feature_ids).distinct()
 
@@ -170,14 +171,16 @@ def summary(request):
 
     top_like_ingredients = (
         Ingredient.objects.filter(drink_records__in=liked_qs)
-        .values('name')
+        # .values('name')
+        .exclude(name="その他")
         .annotate(cnt=Count('id'))
         .order_by('-cnt')[:3]
     )
 
     top_dislike_ingredients = (
         Ingredient.objects.filter(drink_records__in=disliked_qs)
-        .values('name')
+        # .values('name')
+        .exclude(name="その他")
         .annotate(cnt=Count('id'))
         .order_by('-cnt')[:3]
     )
@@ -185,6 +188,7 @@ def summary(request):
     top_like_features = (
         TasteFeature.objects.filter(drink_records__in=liked_qs)
         .values('name')
+        # .exclude(name="その他")
         .annotate(cnt=Count('id'))
         .order_by('-cnt')[:3]
     )
@@ -192,6 +196,7 @@ def summary(request):
     top_dislike_features = (
         TasteFeature.objects.filter(drink_records__in=disliked_qs)
         .values('name')
+        # .exclude(name="その他")
         .annotate(cnt=Count('id'))
         .order_by('-cnt')[:3]
     )

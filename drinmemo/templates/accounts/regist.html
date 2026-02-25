@@ -15,22 +15,34 @@
     <div class="mb-4">
       {{ regist_form.username.label_tag }}
       {{ regist_form.username }}
-      {{ regist_form.username.errors }}
+        {% if regisu_form.username.errors %}
+        <div class="text-danger small mt-1">
+        {{ regist_form.username.errors }}
+        </div>
+      {% endif %}
     </div>
 
     <div class="mb-4">
       {{ regist_form.email.label_tag }}
       {{ regist_form.email }}
-      {{ regist_form.email.errors }}
+      {% if regist_form.email.errors %}
+        <div class="text-danger small mt-1">
+        {{ regist_form.email.errors }}
+        </div>
+      {% endif %}
     </div>
 
     <div class="mb-3">
       {{ regist_form.password.label_tag }}
       {{ regist_form.password }}
-      {{ regist_form.password.errors }}
+      {% if regist_form.password.errors %}
+        <div class="text-danger small mt-1">
+        {{ regist_form.password.errors }}
+        </div>
+      {% endif %}
     </div>
 
-    <!-- 注意書き（デザイン付き） -->
+    <!-- 注意書き -->
     <div class="mb-3 p-3"
          style="background:#f4f4f4; border-radius:10px; font-size:13px; color:#666; line-height:1.6;">
       ・パスワードは最低8文字以上必要です<br>
@@ -41,7 +53,11 @@
     <div class="mb-4">
       {{ regist_form.confirm_password.label_tag }}
       {{ regist_form.confirm_password }}
-      {{ regist_form.confirm_password.errors }}
+      {% if regist_form.confirm_password.errors %}
+        <div class="text-danger small mt-1">
+        {{ regist_form.confirm_password.errors }}
+        </div>
+      {% endif %}
     </div>
 
     <div class="mt-4 d-flex justify-content-center">

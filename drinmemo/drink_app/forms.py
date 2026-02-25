@@ -2,6 +2,9 @@ from django import forms
 from .models import DrinkRecord
 from .models import DrinkType, Ingredient, TasteFeature
 from django.contrib.auth import get_user_model
+from django.utils import timezone
+from django.core.exceptions import ValidationError
+
 
 class DrinkRecordForm(forms.ModelForm):
     class Meta:
@@ -27,9 +30,26 @@ class DrinkRecordForm(forms.ModelForm):
             'taste_features': forms.CheckboxSelectMultiple(),
         }
 
+
+    def clean_recorded_date(self):
+        d = self.cleaned_data.get("recorded_date")
+        if d and d > timezone.localdate():
+            raise ValidationError("未来の日付は選択できません。")
+        return d
+
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['taste_features'].required = True
+        
+        self.fields['taste_features'].queryset = TasteFeature.objects.all().order_by('name')
+
+        self.fields['recorded_date'].required = True
+        self.fields['drink_name'].required = True
+        self.fields['drink_type'].required = True
+        self.fields['total_rating'].required = True
+        self.fields['taste_features'].required = True
+
 
         if self.instance and getattr(self.instance, 'drink_type_id', None):
             self.fields['ingredients'].queryset = Ingredient.objects.filter(
