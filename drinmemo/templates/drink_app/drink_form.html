@@ -3,7 +3,7 @@
 
 <div class='summary-fixed-top mb-3'>
   <h3 class='m-0 fw-bold'>
-    {% if is_edit %}登録内容編集{% else %}記録画面{% endif %}
+    {% if is_edit %}登録内容編集{% else %}新規ドリンク登録記録画面{% endif %}
   </h3>
 
   <div class='text-muted' style='font-size:12px; margin-top:6px;'>
@@ -111,6 +111,16 @@
   <div id="ingredients-area"></div>
 </div>
 
+<div id="ing-other-wrap" class="mt-2" style="display:none;">
+  <div class="text-muted small mb-1">
+    「その他」を選んだ場合は入力してください
+  </div>
+  <textarea name="ingredient_other_text"
+            id="ingredient_other_text"
+            class="form-control"
+            rows="2">{{ ingredient_other_initial }}</textarea>
+</div>
+
 <input type="hidden" id="initial-selected-ids" value="{{ selected_ids|join:',' }}">
 
   <div class="mb-3 mt-3 ">
@@ -123,23 +133,35 @@
     {% endif %}
   </div>
 
+
 <label class="form-label">*味の特徴（複数選択）:</label>
 
 <div class="form-control" style="height: 110px; overflow-y: auto; overflow-x: hidden;">
   <div style="color:#888; font-size:13px;">
     該当する特徴を選択してください
   </div>
-  <div class="mt-2">
-    {{ form.taste_features }}
-  </div>
+
+    <div class="mt-2" id="taste-features-area">
+      {{ form.taste_features }}
+    </div>
 </div>
 
-  {{ form.taste_features.errors }}
+<div id="taste-other-wrap" class="mt-2" style="display:none;">
+  <div class="text-muted small mb-1">
+    「その他」を選んだ場合は入力してください
+  </div>
+    <textarea name="taste_other_text"
+              id="taste_other_text"
+              class="form-control"
+              rows="2">{{ taste_other_initial }}</textarea>
+</div>
+
+  {% comment %} {{ form.taste_features.errors }}
   {% if form.taste_features.errors %}
     <div class="text-danger small mt-1">
       {{ form.taste_features.errors }}
     </div>
-  {% endif %}
+  {% endif %} {% endcomment %}
 
   <div class="mb-3 mt-3 ">
     {{ form.total_rating.label_tag }}
@@ -182,65 +204,121 @@
 document.addEventListener("DOMContentLoaded", () => {
   const drinkTypeEl = document.getElementById("id_drink_type");
   const ingredientsArea = document.getElementById("ingredients-area");
+  const hidden = document.getElementById("initial-selected-ids");
+
+  const ingOtherWrap = document.getElementById("ing-other-wrap");
+  const ingOtherText = document.getElementById("ingredient_other_text");
+
+  const tasteOtherWrap = document.getElementById("taste-other-wrap");
+  const tasteOtherText = document.getElementById("taste_other_text");
+
+  if (!drinkTypeEl || !ingredientsArea) {
+    console.log("drinkTypeEl or ingredientsArea not found");
+    return;
+  }
 
   const initialSelected = new Set();
-  const hidden = document.getElementById("initial-selected-ids");
   if (hidden && hidden.value.trim() !== "") {
     hidden.value.split(",").forEach(v => initialSelected.add(v.trim()));
   }
 
+    const checks = document.querySelectorAll(`input[name="${inputName}"]`);
+    for (const chk of checks) {
+      const label = document.querySelector(`label[for="${chk.id}"]`);
+      const text = (label ? label.textContent : "").replace(/\s+/g, "");
+      if (text.includes("その他") && chk.checked) return true;
+    }
+    return false;
+  }
+
+  function toggleTasteOther() {
+    if (!tasteOtherWrap) return;
+    const on = isOtherCheckedByLabel("taste_features");
+    tasteOtherWrap.style.display = on ? "block" : "none";
+    if (!on && tasteOtherText) tasteOtherText.value = "";
+  }
+
+  function toggleIngredientOther() {
+    if (!ingOtherWrap) return;
+
+    let on = false;
+    const rows = ingredientsArea.querySelectorAll(".form-check");
+
+    rows.forEach(row => {
+      const chk = row.querySelector('input[name="ingredients"]');
+      const label = row.querySelector("label");
+      const text = (label ? label.textContent : "").replace(/\s+/g, "");
+      if (chk && chk.checked && text.includes("その他")) on = true;
+    });
+
+    ingOtherWrap.style.display = on ? "block" : "none";
+    if (!on && ingOtherText) ingOtherText.value = "";
+  }
 
   async function refreshIngredients() {
     const drinkType = drinkTypeEl.value;
 
-    // drink_type が未選択なら素材は空表示
     if (!drinkType) {
       ingredientsArea.innerHTML = "";
+      if (ingOtherWrap) ingOtherWrap.style.display = "none";
       return;
     }
 
-    // 素材取得
-    const res = await fetch(`/drink/api/ingredients/?drink_type=${drinkType}`);
-    if (!res.ok) {
-      ingredientsArea.innerHTML = "<p style='color:red;'>素材の取得に失敗しました</p>";
-      return;
-    }
-    const data = await res.json();
-
-    // チェックボックス
-    ingredientsArea.innerHTML = "";
-    data.ingredients.forEach(item => {
-      const id = `ing_${item.id}`;
-
-      const wrapper = document.createElement("div");
-      wrapper.className = "form-check mb-1";
-
-      const input = document.createElement("input");
-      input.type = "checkbox";
-      input.name = "ingredients"; 
-      input.value = item.id;
-      input.id = id;
-      input.className = "form-check-input";
-
-      // 以前選択していたものを復元（編集用）
-      if (initialSelected.has(String(item.id))) {
-        input.checked = true;
+    try {
+      const res = await fetch(`/drink/api/ingredients/?drink_type=${drinkType}`);
+      if (!res.ok) {
+        ingredientsArea.innerHTML = "<p style='color:red;'>素材の取得に失敗しました</p>";
+        return;
       }
+      const data = await res.json();
 
-      const label = document.createElement("label");
-      label.htmlFor = id;
-      label.textContent = item.name;
-      label.className = "form-check-label";
+      ingredientsArea.innerHTML = "";
 
-      wrapper.appendChild(input);
-      wrapper.appendChild(label);
-      ingredientsArea.appendChild(wrapper);
-    });
+      data.ingredients.forEach(item => {
+        const id = `ing_${item.id}`;
+
+        const wrapper = document.createElement("div");
+        wrapper.className = "form-check mb-1";
+
+        const input = document.createElement("input");
+        input.type = "checkbox";
+        input.name = "ingredients";
+        input.value = item.id;
+        input.id = id;
+        input.className = "form-check-input";
+
+        if (initialSelected.has(String(item.id))) input.checked = true;
+
+        const label = document.createElement("label");
+        label.htmlFor = id;
+        label.textContent = item.name;
+        label.className = "form-check-label";
+
+        wrapper.appendChild(input);
+        wrapper.appendChild(label);
+        ingredientsArea.appendChild(wrapper);
+      });
+
+      toggleIngredientOther();
+
+    } catch (e) {
+      console.log(e);
+      ingredientsArea.innerHTML = "<p style='color:red;'>素材の取得に失敗しました</p>";
+    }
   }
 
   drinkTypeEl.addEventListener("change", refreshIngredients);
 
+  document.addEventListener("change", (e) => {
+    if (e.target && e.target.name === "taste_features") toggleTasteOther();
+  });
+
+  ingredientsArea.addEventListener("change", (e) => {
+    if (e.target && e.target.name === "ingredients") toggleIngredientOther();
+  });
+
   refreshIngredients();
+  toggleTasteOther();
 });
 </script>
 
@@ -267,6 +345,5 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 </script>
-
 
 {% endblock %}

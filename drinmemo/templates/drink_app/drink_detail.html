@@ -38,27 +38,36 @@
 
     <div class="mb-2 d-flex">
     <div style="width:90px;">素材 :</div>
-    <div>
-    {% for ing in record.ingredients.all %}
-      <span class="badge bg-light text-dark border me-1 mb-1">{{ ing.name }}</span>
-    {% empty %}
-      <span class="text-muted">未選択</span>
-    {% endfor %}
-    </div>
+    <ul>
+      {% for ing in record.ingredients.all %}
+        <li>
+          {{ ing.name }}
+          {% if ing.name == "その他" and ingredient_other_detail %}
+            （{{ ingredient_other_detail }}）
+          {% endif %}
+        </li>
+      {% empty %}
+        <li>未選択</li>
+      {% endfor %}
+    </ul>
     </div>
 
     <p>味の評価： {{ record.get_taste_rating_display }}</p>
 
   <div class="mb-2 d-flex">
-  <div style="width:90px;">味の特徴 :
-  </div>
-  <div>
+  <div style="width:90px;">味の特徴 :</div>
+  <ul>
     {% for tf in record.taste_features.all %}
-      <span class="badge bg-light text-dark border me-1 mb-1">{{ tf.name }}</span>
+      <li>
+        {{ tf.name }}
+        {% if tf.name == "その他" and taste_other_detail %}
+          （{{ taste_other_detail }}）
+        {% endif %}
+      </li>
     {% empty %}
-      <span class="text-muted">未選択</span>
+      <li>未選択</li>
     {% endfor %}
-  </div>
+  </ul>
   </div>
 
     <p>総合評価：
@@ -73,8 +82,8 @@
     </span>
     </p>
     <p>メモ： </p>
-    <p>{{ record.memo|default:'-'|linebreaksbr }}</p>
-</div>
+    <p>{{ memo_clean|default:'-'|linebreaksbr }}</p>
+    </div>
 
 <hr>
 

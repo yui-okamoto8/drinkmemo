@@ -4,6 +4,8 @@ from .models import DrinkType, Ingredient, TasteFeature
 from django.contrib.auth import get_user_model
 from django.utils import timezone
 from django.core.exceptions import ValidationError
+from django.db.models import Case, When, Value, IntegerField
+
 
 
 class DrinkRecordForm(forms.ModelForm):
@@ -42,7 +44,11 @@ class DrinkRecordForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['taste_features'].required = True
         
-        self.fields['taste_features'].queryset = TasteFeature.objects.all().order_by('name')
+        self.fields['taste_features'].queryset = TasteFeature.objects.annotate(
+            is_other=Case(
+                When(name='その他', then=Value(1)),
+                default=Value(0), 
+                output_field=IntegerField())).all().order_by('is_other', 'name')
 
         self.fields['recorded_date'].required = True
         self.fields['drink_name'].required = True
@@ -53,8 +59,13 @@ class DrinkRecordForm(forms.ModelForm):
 
         if self.instance and getattr(self.instance, 'drink_type_id', None):
             self.fields['ingredients'].queryset = Ingredient.objects.filter(
-                drink_type_id=self.instance.drink_type_id
-            ).order_by('name')
+            drink_type_id=self.instance.drink_type_id
+        ).annotate(is_other=
+            Case(
+            When(name__iregex=r'^\s*その他\s*$', then=Value(1)),
+            default=Value(0),
+            output_field=IntegerField(),
+        )).order_by('is_other', 'name')
 
 
 TASTE_CHOICES = (

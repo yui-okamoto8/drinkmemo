@@ -1,6 +1,7 @@
 from django.urls import path
 from . import views
 from django.contrib.auth import views as auth_views
+from .forms import CustomPasswordChangeForm
 
 
 app_name = 'accounts'
@@ -16,6 +17,7 @@ urlpatterns = [
         auth_views.PasswordChangeView.as_view(
             template_name='accounts/password_change.html',
             success_url='/accounts/settings/?pw=1',
+            form_class=CustomPasswordChangeForm,
         ),
         name='password_change',
     ),
@@ -26,6 +28,5 @@ urlpatterns = [
         name="logout",
     ),
 
-#     path('activate_user/<uuid:token>', views.activate_user, name='activate_user'),
 ]
 

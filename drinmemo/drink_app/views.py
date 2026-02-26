@@ -7,8 +7,46 @@ from django.http import JsonResponse
 from django.urls import reverse
 from urllib.parse import urlencode
 from django.db.models import Case, When, Value, IntegerField
-
 from .models import DrinkRecord, Ingredient, TasteFeature, DrinkType
+import re
+
+def _extract_other(memo: str, label: str) -> str:
+    """
+    memoの中から [label]〜 を抜き出す
+    例: label="素材その他" なら "[素材その他] りんご" を抽出して "りんご"
+    """
+    if not memo:
+        return ""
+    m = re.search(rf"^\[{re.escape(label)}\]\s*(.*)$", memo, flags=re.MULTILINE)
+    return (m.group(1).strip() if m else "")
+
+def _remove_other_lines(memo: str) -> str:
+    """[素材その他] / [味の特徴その他] の行を消す（重複防止）"""
+    if not memo:
+        return ""
+    lines = []
+    for line in memo.splitlines():
+        s = line.strip()
+        if s.startswith("[素材その他]") or s.startswith("[味の特徴その他]"):
+            continue
+        lines.append(line)
+    return "\n".join(lines).strip()
+
+def _append_other_lines(memo: str, ing_text: str, taste_text: str) -> str:
+    """memo本体に、その他記述を追記して保存用文字列を作る"""
+    base = _remove_other_lines(memo)
+
+    lines = []
+    if base:
+        lines.append(base)
+
+    if ing_text:
+        lines.append(f"[素材その他] {ing_text.strip()}")
+    if taste_text:
+        lines.append(f"[味の特徴その他] {taste_text.strip()}")
+
+    return "\n".join(lines).strip()
+
 
 
 #記録一覧
@@ -85,6 +123,12 @@ def drink_create(request):
     if request.method == 'POST' and form.is_valid():
             record = form.save(commit=False)
             record.user = request.user
+
+            ing_other_text = request.POST.get("ingredient_other_text", "").strip()
+            taste_other_text = request.POST.get("taste_other_text", "").strip()
+
+            record.memo = _append_other_lines(record.memo or "", ing_other_text, taste_other_text)
+
             record.save()
             form.save_m2m()
             return redirect('drink_app:list')
@@ -113,7 +157,39 @@ def ingredients_filter(request):
 @login_required
 def drink_detail(request, pk):
     record = get_object_or_404(DrinkRecord, pk=pk, user=request.user)
-    return render(request, 'drink_app/drink_detail.html', {'record': record})
+    
+    ing_other = _extract_other(record.memo or "", "素材その他")
+    taste_other = _extract_other(record.memo or "", "味の特徴その他")
+
+    memo_lines = []
+    for line in (record.memo or "").splitlines():
+        if line.strip().startswith("[素材その他]") or line.strip().startswith("[味の特徴その他]"):
+            continue
+        memo_lines.append(line)
+    memo_clean = "\n".join(memo_lines).strip()
+    
+    ingredients_sorted = record.ingredients.annotate(
+        is_other=Case(
+            When(name__iregex='^\s*その他\s*$', then=Value(1)),
+            default=Value(0),
+            output_field=IntegerField(),
+        )
+    ).order_by("is_other", "name")
+
+    taste_features_sorted = record.taste_features.annotate(
+        is_other=Case(
+            When(name="その他", then=Value(1)),
+            default=Value(0),
+            output_field=IntegerField(),
+        )
+    )
+    
+    return render(request, 'drink_app/drink_detail.html', {
+        'record': record, 
+        "ingredient_other_detail": ing_other,
+        "taste_other_detail": taste_other,
+        "memo_clean": memo_clean, 
+        })
 
 
 @login_required
@@ -121,19 +197,34 @@ def drink_update(request, pk):
     record = get_object_or_404(DrinkRecord, pk=pk, user=request.user)
     form = DrinkRecordForm(request.POST or None, request.FILES or None, instance=record)
 
-    if request.method == 'POST' and form.is_valid():
-        form.save()
-        return redirect('drink_app:detail', pk=record.pk)
+    ing_other_initial = _extract_other(record.memo or "", "素材その他")
+    taste_other_initial = _extract_other(record.memo or "", "味の特徴その他")
+
+    if request.method == "POST" and form.is_valid():
+        updated = form.save(commit=False)
+
+        ing_other_text = request.POST.get("ingredient_other_text", "").strip()
+        taste_other_text = request.POST.get("taste_other_text", "").strip()
+
+        updated.memo = _append_other_lines(updated.memo or "", ing_other_text, taste_other_text)
+
+        updated.save()
+        form.save_m2m()
+        return redirect("drink_app:detail", pk=record.pk)
 
     selected_ids = list(record.ingredients.values_list("id", flat=True))
 
+    return render(request, "drink_app/drink_form.html", {
+        "form": form,
+        "is_edit": True,
+        "record": record,
+        "selected_ids": selected_ids,
 
-    return render(request, 'drink_app/drink_form.html', {
-        'form': form,
-        'is_edit': True,
-        'record':record,
-        'selected_ids': selected_ids,
-        })
+        "ingredient_other_initial": ing_other_initial,
+        "taste_other_initial": taste_other_initial,
+    })
+
+
 
 
 @login_required
@@ -188,7 +279,7 @@ def summary(request):
     top_like_features = (
         TasteFeature.objects.filter(drink_records__in=liked_qs)
         .values('name')
-        # .exclude(name="その他")
+        .exclude(name="その他")
         .annotate(cnt=Count('id'))
         .order_by('-cnt')[:3]
     )
@@ -196,7 +287,7 @@ def summary(request):
     top_dislike_features = (
         TasteFeature.objects.filter(drink_records__in=disliked_qs)
         .values('name')
-        # .exclude(name="その他")
+        .exclude(name="その他")
         .annotate(cnt=Count('id'))
         .order_by('-cnt')[:3]
     )
