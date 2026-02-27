@@ -39,11 +39,10 @@ class DrinkRecordForm(forms.ModelForm):
             raise ValidationError("未来の日付は選択できません。")
         return d
 
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
         self.fields['taste_features'].required = True
-        
         self.fields['taste_features'].queryset = TasteFeature.objects.annotate(
             is_other=Case(
                 When(name='その他', then=Value(1)),
@@ -56,16 +55,35 @@ class DrinkRecordForm(forms.ModelForm):
         self.fields['total_rating'].required = True
         self.fields['taste_features'].required = True
 
+        drink_type_id = None
 
-        if self.instance and getattr(self.instance, 'drink_type_id', None):
+        if self.data.get('drink_type'):
+            drink_type_id = self.data.get('drink_type')
+
+        elif self.instance and getattr(self.instance, 'drink_type_id', None):
+            drink_type_id = self.instance.drink_type_id
+
+        if drink_type_id:
             self.fields['ingredients'].queryset = Ingredient.objects.filter(
-            drink_type_id=self.instance.drink_type_id
-        ).annotate(is_other=
-            Case(
-            When(name__iregex=r'^\s*その他\s*$', then=Value(1)),
-            default=Value(0),
-            output_field=IntegerField(),
-        )).order_by('is_other', 'name')
+            drink_type_id=drink_type_id
+            ).annotate(
+            is_other=Case(
+                When(name='その他', then=Value(1)),
+                default=Value(0),
+                output_field=IntegerField(),
+            )
+        ).order_by('is_other', 'name')
+            
+        else:
+            self.fields['ingredients'].queryset = Ingredient.objects.none()
+
+        for name, field in self.fields.items():
+            w = field.widget
+            if name in ["ingredients", "taste_features"]:
+                continue
+            css = "form-select" if w.__class__.__name__ == "Select" else "form-control"
+            existing = w.attrs.get("class", "")
+            w.attrs["class"] = (existing + " " + css).strip()
 
 
 TASTE_CHOICES = (

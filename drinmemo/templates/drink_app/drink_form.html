@@ -3,7 +3,7 @@
 
 <div class='summary-fixed-top mb-3'>
   <h3 class='m-0 fw-bold'>
-    {% if is_edit %}登録内容編集{% else %}新規ドリンク登録記録画面{% endif %}
+    {% if is_edit %}登録内容編集{% else %}新規ドリンク登録画面{% endif %}
   </h3>
 
   <div class='text-muted' style='font-size:12px; margin-top:6px;'>
@@ -11,14 +11,21 @@
   </div>
 </div>
 
-<form method='post' enctype='multipart/form-data'>
+<form method='post' enctype='multipart/form-data' novalidate>
   {% csrf_token %}
-    {{ form.errors }}
-    {% if form.non_field_errors %}
+
+  {% if form.errors %}
+    <div class="alert alert-danger">
+      入力内容に不備があります。赤字をご確認ください。
+    </div>
+  {% endif %}
+
+  {% if form.non_field_errors %}
     <div class="alert alert-danger">
       {{ form.non_field_errors }}
     </div>
   {% endif %}
+
 
 {# 画像 #}
 <div class="mb-3">
@@ -38,6 +45,13 @@
   <span id="image-selected-name" class="ms-2 small text-muted">
   {% if is_edit and record.image %}（現在の画像あり）{% else %}（未選択）{% endif %}
   </span>
+
+  <button type="button"
+        id="image-clear-btn"
+        class="btn btn-outline-danger btn-sm ms-1"
+        style="display:none;">
+  選択をクリア
+  </button> 
 
   <div class="d-none">
     {{ form.image }}
@@ -64,7 +78,7 @@
     {{ form.recorded_date }}
     {% if form.recorded_date.errors %}
       <div class="text-danger small mt-1">
-        {{ form.recorded_date.errors }}
+        {{ form.recorded_date.errors.0 }}
       </div>
     {% endif %}
   </div>
@@ -74,7 +88,7 @@
     {{ form.drink_name }}
     {% if form.drink_name.errors %}
       <div class="text-danger small mt-1">
-        {{ form.drink_name.errors }}
+        {{ form.drink_name.errors.0 }}
       </div>
     {% endif %}
   </div>
@@ -96,7 +110,7 @@
     {{ form.drink_type }}
     {% if form.drink_type.errors %}
       <div class="text-danger small mt-1">
-        {{ form.drink_type.errors }}
+        {{ form.drink_type.errors.0 }}
       </div>
     {% endif %}
   </div>
@@ -111,9 +125,15 @@
   <div id="ingredients-area"></div>
 </div>
 
+    {% if form.ingredients.errors %}
+      <div class="text-danger small mt-1">
+        {{ form.ingredients.errors.0 }}
+      </div>
+    {% endif %}
+
 <div id="ing-other-wrap" class="mt-2" style="display:none;">
   <div class="text-muted small mb-1">
-    「その他」を選んだ場合は入力してください
+    「その他」の詳細を入力することができます
   </div>
   <textarea name="ingredient_other_text"
             id="ingredient_other_text"
@@ -128,7 +148,7 @@
     {{ form.taste_rating }}
     {% if form.taste_rating.errors %}
       <div class="text-danger small mt-1">
-        {{ form.taste_rating.errors }}
+        {{ form.taste_rating.errors.0 }}
       </div>
     {% endif %}
   </div>
@@ -141,14 +161,20 @@
     該当する特徴を選択してください
   </div>
 
-    <div class="mt-2" id="taste-features-area">
-      {{ form.taste_features }}
-    </div>
+  <div class="mt-2" id="taste-features-area">
+    {{ form.taste_features }}
+  </div>
 </div>
+
+{% if form.taste_features.errors %}
+  <div class="text-danger small mt-1">
+    {{ form.taste_features.errors.0 }}
+  </div>
+{% endif %}
 
 <div id="taste-other-wrap" class="mt-2" style="display:none;">
   <div class="text-muted small mb-1">
-    「その他」を選んだ場合は入力してください
+    「その他」の詳細を入力することができます
   </div>
     <textarea name="taste_other_text"
               id="taste_other_text"
@@ -156,19 +182,12 @@
               rows="2">{{ taste_other_initial }}</textarea>
 </div>
 
-  {% comment %} {{ form.taste_features.errors }}
-  {% if form.taste_features.errors %}
-    <div class="text-danger small mt-1">
-      {{ form.taste_features.errors }}
-    </div>
-  {% endif %} {% endcomment %}
-
   <div class="mb-3 mt-3 ">
     {{ form.total_rating.label_tag }}
     {{ form.total_rating }}
     {% if form.total_rating.errors %}
       <div class="text-danger small mt-1">
-        {{ form.total_rating.errors }}
+        {{ form.total_rating.errors.0 }}
       </div>
     {% endif %}
   </div>
@@ -222,6 +241,7 @@ document.addEventListener("DOMContentLoaded", () => {
     hidden.value.split(",").forEach(v => initialSelected.add(v.trim()));
   }
 
+  function isOtherCheckedByLabel(inputName) {
     const checks = document.querySelectorAll(`input[name="${inputName}"]`);
     for (const chk of checks) {
       const label = document.querySelector(`label[for="${chk.id}"]`);
@@ -254,15 +274,16 @@ document.addEventListener("DOMContentLoaded", () => {
     ingOtherWrap.style.display = on ? "block" : "none";
     if (!on && ingOtherText) ingOtherText.value = "";
   }
-
+  
   async function refreshIngredients() {
     const drinkType = drinkTypeEl.value;
 
-    if (!drinkType) {
-      ingredientsArea.innerHTML = "";
-      if (ingOtherWrap) ingOtherWrap.style.display = "none";
-      return;
-    }
+  ingredientsArea.innerHTML = "";
+
+  if (!drinkType) {
+    if (ingOtherWrap) ingOtherWrap.style.display = "none";
+    return;
+  }
 
     try {
       const res = await fetch(`/drink/api/ingredients/?drink_type=${drinkType}`);
@@ -270,8 +291,8 @@ document.addEventListener("DOMContentLoaded", () => {
         ingredientsArea.innerHTML = "<p style='color:red;'>素材の取得に失敗しました</p>";
         return;
       }
-      const data = await res.json();
 
+      const data = await res.json();
       ingredientsArea.innerHTML = "";
 
       data.ingredients.forEach(item => {
@@ -300,14 +321,19 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
       toggleIngredientOther();
-
     } catch (e) {
       console.log(e);
       ingredientsArea.innerHTML = "<p style='color:red;'>素材の取得に失敗しました</p>";
     }
   }
 
-  drinkTypeEl.addEventListener("change", refreshIngredients);
+  drinkTypeEl.addEventListener("change", () => {
+  initialSelected.clear();
+  if (hidden) hidden.value = "" ;
+  if (ingOtherWrap) ingOtherWrap.style.display = "none";
+  if (ingOtherText) ingOtherText.value = "";
+  refreshIngredients();
+  });
 
   document.addEventListener("change", (e) => {
     if (e.target && e.target.name === "taste_features") toggleTasteOther();
@@ -322,27 +348,60 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 </script>
 
+
 <script>
 document.addEventListener("DOMContentLoaded", () => {
 
   const imageInput = document.getElementById("id_image");
   const nameEl = document.getElementById("image-selected-name");
   const previewEl = document.getElementById("image-preview");
+  const clearBtn = document.getElementById("image-clear-btn");
 
-  if (imageInput) {
-    imageInput.addEventListener("change", () => {
-      const file = imageInput.files && imageInput.files[0];
+   if (!imageInput) return;
 
-      if (!file) {
-        nameEl.textContent = "（未選択）";
-        previewEl.style.display = "none";
-        previewEl.src = "";
-        return;
-      }
+  function resetImageUi() {
+    nameEl.textContent = "（未選択）";
+    if (previewEl) {
+      previewEl.style.display = "none";
+      previewEl.src = "";
+    }
+    if (clearBtn) {
+      clearBtn.style.display = "none";
+    }
+  }
 
-      nameEl.textContent = `選択中：${file.name}`;
+  imageInput.addEventListener("change", () => {
+    const file = imageInput.files && imageInput.files[0];
+
+    if (!file) {
+      resetImageUi();
+      return;
+    }
+
+    nameEl.textContent = `選択中：${file.name}`;
+
+    if (clearBtn) {
+      clearBtn.style.display = "inline-block";
+    }
+
+    // プレビュー表示している場合
+    if (previewEl) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        previewEl.src = e.target.result;
+        previewEl.style.display = "block";
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+
+  if (clearBtn) {
+    clearBtn.addEventListener("click", () => {
+      imageInput.value = "";
+      resetImageUi();
     });
   }
+
 });
 </script>
 

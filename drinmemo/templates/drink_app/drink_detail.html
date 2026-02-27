@@ -36,39 +36,45 @@
     <p>店舗名： {{ record.store_name|default:'-' }}</p>
     <p>メーカー名： {{ record.maker_name|default:'-'}}</p>
 
-    <div class="mb-2 d-flex">
-    <div style="width:90px;">素材 :</div>
-    <ul>
-      {% for ing in record.ingredients.all %}
-        <li>
-          {{ ing.name }}
-          {% if ing.name == "その他" and ingredient_other_detail %}
-            （{{ ingredient_other_detail }}）
-          {% endif %}
-        </li>
-      {% empty %}
-        <li>未選択</li>
-      {% endfor %}
-    </ul>
+    <div class="mb-3 d-flex">
+      <div style="width:90px;">素材 :</div>
+
+      {% if record.ingredients.all %}
+        <div class="d-flex flex-wrap gap-2">
+          {% for ing in record.ingredients.all %}
+            <span class="badge rounded bg-light text-dark border">
+              {{ ing.name }}
+              {% if ing.name == "その他" and ingredient_other_detail %}
+                （{{ ingredient_other_detail }}）
+              {% endif %}
+            </span>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="text-muted small">未選択</div>
+      {% endif %}
     </div>
 
     <p>味の評価： {{ record.get_taste_rating_display }}</p>
 
-  <div class="mb-2 d-flex">
-  <div style="width:90px;">味の特徴 :</div>
-  <ul>
-    {% for tf in record.taste_features.all %}
-      <li>
-        {{ tf.name }}
-        {% if tf.name == "その他" and taste_other_detail %}
-          （{{ taste_other_detail }}）
-        {% endif %}
-      </li>
-    {% empty %}
-      <li>未選択</li>
-    {% endfor %}
-  </ul>
-  </div>
+    <div class="mb-3 d-flex">
+      <div style="width:90px;">味の特徴 :</div>
+
+      {% if record.taste_features.all %}
+        <div class="d-flex flex-wrap gap-2">
+          {% for tf in record.taste_features.all %}
+            <span class="badge rounded bg-light text-dark border">
+              {{ tf.name }}
+              {% if tf.name == "その他" and taste_other_detail %}
+                （{{ taste_other_detail }}）
+              {% endif %}
+            </span>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="text-muted small">未選択</div>
+      {% endif %}
+    </div>
 
     <p>総合評価：
     <span style='font-size:18px; color:#f5b301;'>
