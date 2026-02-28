@@ -133,7 +133,12 @@ class DrinkFilterForm(forms.Form):
     )
 
     taste_features = forms.ModelMultipleChoiceField(
-        queryset=TasteFeature.objects.all().order_by('name'),
+        queryset=TasteFeature.objects.annotate(
+            is_other=Case(
+                When(name='その他', then=Value(1)),
+                default=Value(0), 
+                output_field=IntegerField(),)
+                ).order_by('is_other', 'name'),
         required=False,
         widget=forms.CheckboxSelectMultiple,
         label='味の特徴'
