@@ -3,7 +3,7 @@
 
 <div class='summary-fixed-top mb-3'>
   <h3 class='m-0 fw-bold'>
-    {% if is_edit %}登録内容編集{% else %}新規ドリンク登録画面{% endif %}
+    {% if is_edit %}登録内容編集{% else %}新規ドリンク登録{% endif %}
   </h3>
 
   <div class='text-muted' style='font-size:12px; margin-top:6px;'>
@@ -29,48 +29,59 @@
 
 {# 画像 #}
 <div class="mb-3">
-  <label class="form-label">{{ form.image.label }}</label>
+<label class="form-label">{{ form.image.label }}</label>
 
-  {% if is_edit and record.image %}
-    <div class="mb-2">
-      <img src="{{ record.image.url }}" alt="現在の画像"
-           style="max-width:140px; border:1px solid #ddd; border-radius:8px;">
-    </div>
-  {% endif %}
-
-  <label for="id_image" class="btn btn-secondary btn-sm">
-    画像を変更
-  </label>
-
-  <span id="image-selected-name" class="ms-2 small text-muted">
-  {% if is_edit and record.image %}（現在の画像あり）{% else %}（未選択）{% endif %}
-  </span>
-
-  <button type="button"
-        id="image-clear-btn"
-        class="btn btn-danger btn-sm ms-1"
-        style="display:none;">
-  選択をクリア
-  </button> 
-
-  <div class="d-none">
-    {{ form.image }}
-  </div>
-
-  {% if is_edit and record.image %}
-    <div class="form-check mt-2">
-      <input class="form-check-input" type="checkbox"
-             name="image-clear" id="id_image_clear">
-      <label class="form-check-label small text-muted" for="id_image_clear">
-        画像をクリア
-      </label>
-    </div>
-  {% endif %}
-
-  {% if form.image.errors %}
-    <div class="text-danger small mt-1">{{ form.image.errors }}</div>
-  {% endif %}
+<div class="mb-2">
+{% if is_edit and record.image %}
+<img id="image-preview"
+src="{{ record.image.url }}"
+alt="画像プレビュー"
+style="max-width:140px; max-height:140px; border:1px solid #ddd; border-radius:8px; object-fit:cover; display:block;">
+{% else %}
+<img id="image-preview"
+src=""
+alt="画像プレビュー"
+style="max-width:140px; max-height:140px; border:1px solid #ddd; border-radius:8px; object-fit:cover; display:none;">
+{% endif %}
 </div>
+
+<label for="id_image" class="btn btn-secondary btn-sm">
+画像を変更
+</label>
+
+<span id="image-selected-name" class="ms-2 small text-muted">
+{% if not is_edit %}
+（未選択）
+{% endif %}
+</span>
+
+<button type="button"
+id="image-clear-btn"
+class="btn btn-danger btn-sm ms-1"
+style="display:none;">
+選択をクリア
+</button>
+
+<div class="d-none">
+{{ form.image }}
+</div>
+
+{% if is_edit and record.image %}
+<div class="form-check mt-2">
+<input class="form-check-input" type="checkbox"
+name="image-clear" id="id_image_clear">
+<label class="form-check-label small text-muted" for="id_image_clear">
+画像をクリア
+</label>
+</div>
+{% endif %}
+
+{% if form.image.errors %}
+<div class="text-danger small mt-1">{{ form.image.errors }}</div>
+{% endif %}
+</div>
+
+
 
 {# 日付以降 #}
   <div class="mb-3">
@@ -135,10 +146,12 @@
   <div class="text-muted small mb-1">
     「その他」の詳細を入力することができます
   </div>
-  <textarea name="ingredient_other_text"
-            id="ingredient_other_text"
-            class="form-control"
-            rows="2">{{ ingredient_other_initial }}</textarea>
+  <input type="text"
+  name="ingredient_other_text"
+  class="form-control"
+  maxlength="50"
+  value="{{ ingredient_other_initial }}"
+  placeholder="その他の素材を入力">
 </div>
 
 <input type="hidden" id="initial-selected-ids" value="{{ selected_ids|join:',' }}">
@@ -176,10 +189,12 @@
   <div class="text-muted small mb-1">
     「その他」の詳細を入力することができます
   </div>
-    <textarea name="taste_other_text"
-              id="taste_other_text"
-              class="form-control"
-              rows="2">{{ taste_other_initial }}</textarea>
+    <input type="text"
+    name="taste_other_text"
+    class="form-control"
+    maxlength="50"
+    value="{{ taste_other_initial }}"
+    placeholder="味の特徴を入力">
 </div>
 
   <div class="mb-3 mt-3 ">
@@ -378,7 +393,7 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    nameEl.textContent = `選択中：${file.name}`;
+    nameEl.textContent = "";
 
     if (clearBtn) {
       clearBtn.style.display = "inline-block";

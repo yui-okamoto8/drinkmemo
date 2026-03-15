@@ -67,7 +67,7 @@ class EmailChangeForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ("email",)
-        labels = {"email": "メールアドレス"}
+        labels = {"email": "新しいメールアドレス"}
         widgets = {
             "email": forms.EmailInput(attrs={"class": "form-control"})
         }

@@ -100,7 +100,6 @@ def drink_list(request):
             records = records.filter(ingredients__id__in=ids).distinct()
 
     taste_feature_ids = request.GET.getlist('taste_features')
-    ids = [int(x) for x in ingredients_param.split(",") if x.isdigit()]
     if taste_feature_ids:
         records = records.filter(taste_features__id__in=taste_feature_ids).distinct()
 
@@ -138,8 +137,8 @@ def drink_create(request):
             record = form.save(commit=False)
             record.user = request.user
 
-            ing_other_text = request.POST.get("ingredient_other_text", "").strip()
-            taste_other_text = request.POST.get("taste_other_text", "").strip()
+            ing_other_text = request.POST.get("ingredient_other_text", "").replace("\r\n", " ").replace("\n", " ").strip()
+            taste_other_text = request.POST.get("taste_other_text", "").replace("\r\n", " ").replace("\n", " ").strip()
 
             record.memo = _append_other_lines(record.memo or "", ing_other_text, taste_other_text)
 
@@ -226,8 +225,8 @@ def drink_update(request, pk):
     if request.method == "POST" and form.is_valid():
         updated = form.save(commit=False)
 
-        ing_other_text = request.POST.get("ingredient_other_text", "").strip()
-        taste_other_text = request.POST.get("taste_other_text", "").strip()
+        ing_other_text = request.POST.get("ingredient_other_text", "").replace("\r\n", " ").replace("\n", " ").strip()
+        taste_other_text = request.POST.get("taste_other_text", "").replace("\r\n", " ").replace("\n", " ").strip()
 
         updated.memo = _append_other_lines(updated.memo or "", ing_other_text, taste_other_text)
 

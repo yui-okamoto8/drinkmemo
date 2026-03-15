@@ -63,49 +63,16 @@ def account_settings(request):
 @login_required
 def email_change(request):
     user = request.user
-    form = EmailChangeForm(instance=user)
 
     if request.method == "POST":
-        form = EmailChangeForm(request.POST, instance=user)
+        form = EmailChangeForm(request.POST)
         if form.is_valid():
-            form.save()
+            user.email = form.cleaned_data["email"]
+            user.save()
             return redirect("/accounts/settings/?email=1")
+    else:
+        form = EmailChangeForm()
 
     return render(request, "accounts/email_change.html", {"form": form})
 
-# パスワード再設定
-def password_reset(request):
-    if request.method == "POST":
-        email = request.POST.get("email")
-
-        try:
-            user = User.objects.get(email=email)
-            request.session["reset_user_id"] = user.id
-            return redirect("accounts:password_reset_confirm")
-        except User.DoesNotExist:
-            messages.error(request, "そのメールアドレスは登録されていません。")
-
-    return render(request, "accounts/password_reset.html")
-
-def password_reset_confirm(request):
-    user_id = request.session.get("reset_user_id")
-
-    if not user_id:
-        return redirect("accounts:login")
-
-    user = User.objects.get(id=user_id)
-
-    if request.method == "POST":
-        password1 = request.POST.get("password1")
-        password2 = request.POST.get("password2")
-
-        if password1 != password2:
-            messages.error(request, "パスワードが一致しません。")
-        else:
-            user.set_password(password1)
-            user.save()
-            del request.session["reset_user_id"]
-            return redirect("accounts:login")
-
-    return render(request, "accounts/password_reset_confirm.html")
 

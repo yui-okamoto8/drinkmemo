@@ -55,7 +55,18 @@ class DrinkRecordForm(forms.ModelForm):
         self.fields['total_rating'].required = True
         self.fields['taste_features'].required = True
 
+        required_message = "この項目は入力必須です"
+
+        self.fields['recorded_date'].error_messages['required'] = required_message
+        self.fields['drink_name'].error_messages['required'] = required_message
+        self.fields['drink_type'].error_messages['required'] = required_message
+        self.fields['total_rating'].error_messages['required'] = required_message
+        self.fields['taste_rating'].error_messages['required'] = required_message
+        self.fields['taste_features'].error_messages['required'] = required_message
+        self.fields['ingredients'].error_messages['required'] = required_message
+
         drink_type_id = None
+
 
         if self.data.get('drink_type'):
             drink_type_id = self.data.get('drink_type')
@@ -95,10 +106,10 @@ TASTE_CHOICES = (
 
 TOTAL_CHOICES = (
     ('', '指定なし'),
-    ('0', '★★★'),
-    ('1', '★★☆'),
-    ('2', '★☆☆'),
-    ('3', '☆☆☆'),
+    ('0', '☆☆☆'),
+    ('1', '★☆☆'),
+    ('2', '★★☆'),
+    ('3', '★★★'),
 )
 
 class DrinkFilterForm(forms.Form):
