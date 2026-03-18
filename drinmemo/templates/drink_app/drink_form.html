@@ -11,7 +11,7 @@
   </div>
 </div>
 
-<form method='post' enctype='multipart/form-data' novalidate>
+<form method='post' enctype='multipart/form-data' novalidate id='drink-form' >
   {% csrf_token %}
 
   {% if form.errors %}
@@ -147,6 +147,7 @@ name="image-clear" id="id_image_clear">
     「その他」の詳細を入力することができます
   </div>
   <input type="text"
+  id="ingredient_other_text"
   name="ingredient_other_text"
   class="form-control"
   maxlength="50"
@@ -190,6 +191,7 @@ name="image-clear" id="id_image_clear">
     「その他」の詳細を入力することができます
   </div>
     <input type="text"
+    id="taste_other_text"
     name="taste_other_text"
     class="form-control"
     maxlength="50"
@@ -215,7 +217,7 @@ name="image-clear" id="id_image_clear">
 
 <div class='mt-4 d-flex justify-content-center '>
   <div style='width:180px;'>
-    <button type='submit' class='btn btn-primary w-100'>
+    <button type='submit' class='btn btn-primary w-100' id='drink-submit-btn' >
         保存する
     </button>
   </div>
@@ -417,6 +419,20 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+});
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const form = document.getElementById("drink-form");
+  const submitBtn = document.getElementById("drink-submit-btn");
+
+  if (!form || !submitBtn) return;
+
+  form.addEventListener("submit", function() {
+    submitBtn.disabled = true;
+    submitBtn.innerText = "送信中...";
+  });
 });
 </script>
 
